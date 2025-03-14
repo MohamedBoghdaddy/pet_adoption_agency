@@ -1,0 +1,94 @@
+:root {
+  --oyster-pink: #e8cec7;
+  --tundora: #404040;
+  --petite-orchid: #da9a96;
+  --white: #ffffff;
+  --silver: #cac9c9;
+}
+
+
+.full-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  color: var(--tundora);
+}
+
+
+
+/* ✅ Virtual Showroom */
+.virtual-showroom {
+  padding: 40px 0;
+}
+
+.virtual-showroom .content {
+  text-align: left;
+  padding: 20px;
+}
+
+.virtual-showroom img {
+  max-width: 100%;
+  height: auto;
+}
+
+.virtual-showroom h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.virtual-showroom p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+.virtual-showroom .btn-dark {
+  background-color: var(--tundora);
+  border: none;
+}
+
+.virtual-showroom .btn-dark:hover {
+  background-color: var(--silver);
+  color: var(--tundora);
+}
+
+/* ✅ Contact Info */
+.contact-info {
+  background-color: var(--oyster-pink);
+  padding: 20px 0;
+  text-align: center;
+}
+
+.contact-info h2 {
+  color: var(--tundora);
+  font-family: "Beverly", sans-serif;
+}
+
+.contact-info p {
+  font-size: 1.1em;
+  line-height: 1.5em;
+}
+
+.contact-info button {
+  background-color: var(--petite-orchid);
+  color: var(--white);
+  border: 2px solid var(--tundora);
+  padding: 10px 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.contact-info button:hover {
+  background-color: var(--tundora);
+  color: var(--white);
+}
+
+/* ✅ Responsive Styles */
+@media only screen and (max-width: 768px) {
+
+
+  .virtual-showroom h2 {
+    font-size: 1.8rem;
+  }
+}

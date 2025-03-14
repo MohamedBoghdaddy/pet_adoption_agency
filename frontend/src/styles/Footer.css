@@ -1,0 +1,121 @@
+:root {
+  --oyster-pink: #e8cec7;
+  --tundora: #404040;
+  --petite-orchid: #da9a96;
+  --white: #ffffff;
+  --silver: #cac9c9;
+}
+
+.footer {
+  background-color: var(--tundora); /* Dark gray */
+  color: var(--white);
+  padding: 50px 0;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-col {
+  flex: 1;
+  margin: 20px;
+  min-width: 200px;
+}
+
+.footer-col h4 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--oyster-pink); /* Soft warm pink */
+}
+
+.footer-col p {
+  font-size: 14px;
+  color: var(--silver); /* Light gray */
+  line-height: 1.6;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+  color: var(--silver);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+  color: var(--oyster-pink);
+}
+
+/* Social Media Icons */
+.icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.icons a {
+  color: var(--white);
+  font-size: 18px;
+  transition: color 0.3s ease-in-out;
+}
+
+.icons a:hover {
+  color: var(--petite-orchid); /* Gentle pastel red */
+}
+
+/* Newsletter Subscription Form */
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsletter-form input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--silver);
+  border-radius: 4px;
+  outline: none;
+  background-color: var(--white);
+}
+
+.newsletter-form button {
+  padding: 10px;
+  border: none;
+  background-color: var(--petite-orchid);
+  color: var(--white);
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.newsletter-form button:hover {
+  background-color: var(--oyster-pink);
+  color: var(--tundora);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .icons {
+    justify-content: center;
+  }
+}
