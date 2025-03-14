@@ -1,0 +1,139 @@
+:root {
+  --oyster-pink: #e8cec7;
+  --tundora: #404040;
+  --petite-orchid: #da9a96;
+  --white: #ffffff;
+  --silver: #cac9c9;
+}
+
+/* ==========================
+   ✅ Navbar General Styles
+=========================== */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 70px;
+  background-color: var(--tundora); /* Dark Gray */
+  color: var(--white);
+  padding: 0 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ✅ Navbar Brand Logo */
+.nav-logo {
+  width: 80px;
+  height: auto;
+}
+
+/* ✅ Navbar Links */
+.navbar .nav-link {
+  padding: 8px 12px;
+  color: var(--silver); /* Light gray */
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar .nav-link:hover {
+  color: var(--oyster-pink); /* Soft warm pink */
+}
+
+/* ✅ Navbar Toggler */
+.navbar .navbar-toggler {
+  background-color: var(--tundora);
+  border: none;
+}
+
+/* ✅ Dropdown (Pet Categories) */
+.nav-link-products {
+  color: var(--tundora);
+  font-weight: bold;
+  transition: background 0.3s ease-in-out;
+}
+
+.nav-link-products:hover {
+  background-color: var(--petite-orchid) !important;
+  color: var(--white) !important;
+}
+
+/* ✅ Wishlist */
+.navbar .link-wish {
+  color: var(--petite-orchid);
+  font-size: 18px;
+  transition: color 0.3s ease;
+}
+
+.navbar .link-wish:hover {
+  color: red;
+}
+
+/* ✅ Cart */
+.count {
+  background: var(--silver);
+  border-radius: 50%;
+  color: var(--white);
+  padding: 2px 6px;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.count:hover {
+  background: var(--petite-orchid);
+}
+
+/* ✅ Search Bar */
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.form-control {
+  border: 1px solid var(--silver);
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--white);
+}
+
+.search-button {
+  margin-left: 10px;
+  cursor: pointer;
+  background-color: var(--petite-orchid);
+  color: var(--white);
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background 0.3s ease-in-out;
+}
+
+.search-button:hover {
+  background-color: var(--oyster-pink);
+}
+
+/* ✅ Responsive */
+@media (max-width: 992px) {
+  .navbar .nav-link {
+    font-size: 1.2rem;
+  }
+
+  .search-container {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+  }
+
+  .navbar-toggler {
+    align-self: flex-end;
+  }
+}
