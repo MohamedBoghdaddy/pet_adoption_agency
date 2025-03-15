@@ -3,6 +3,7 @@ import { Navbar, Nav, Container, NavDropdown, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faSignOutAlt, faPaw } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 import logo from "../../Assets/Images/pet-logo.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../styles/Navbar.css";
@@ -67,11 +68,11 @@ const NavBar = () => {
               onMouseLeave={() => setShowDropdown(false)}
             >
               {[
-                { route: "/adopt/dogs", label: "Dogs" },
-                { route: "/adopt/cats", label: "Cats" },
-                { route: "/adopt/birds", label: "Birds" },
-                { route: "/adopt/bunnies", label: "Bunnies" },
-                { route: "/adopt/others", label: "Others" },
+                { route: "/Dogs", label: "Dogs" },
+                { route: "/Cats", label: "Cats" },
+                { route: "/Birds", label: "Birds" },
+                { route: "/Bunnies", label: "Bunnies" },
+                { route: "/Others", label: "Others" },
               ].map(({ route, label }) => (
                 <NavDropdown.Item
                   key={route}
@@ -86,12 +87,12 @@ const NavBar = () => {
             </NavDropdown>
 
             <Nav.Link
-              as={Link}
-              to="/about"
+              as={ScrollLink}
+              to="/WhoWeAre"
               className="nav-link"
               onClick={handleNavCollapse}
             >
-              About Us
+              WHO WE ARE
             </Nav.Link>
             <Nav.Link
               as={Link}
