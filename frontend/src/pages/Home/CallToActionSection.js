@@ -6,9 +6,11 @@ const CallToActionSection = () => {
   const navigate = useNavigate();
 
   const handleAdoptClick = () => {
-    navigate("/adopt");
+    navigate("/adoption"); // Redirects to the adoption process page
   };
-
+  const handleArticleClick = () => {
+    navigate("/HowTo"); // Redirects to the adoption process page
+  };
   return (
     <section className="cta-section">
       <Container>
@@ -25,7 +27,9 @@ const CallToActionSection = () => {
           <Col md={4} className="cta-actions">
             <h3 className="cta-subtitle">Learn the basics before adopting!</h3>
             <div className="cta-buttons">
-              <Button className="btn-light">How to Take Care →</Button>
+              <Button className="btn-light" onClick={handleArticleClick}>
+                How to Take Care →
+              </Button>
               <Button variant="dark" onClick={handleAdoptClick}>
                 Start Adopting →
               </Button>
