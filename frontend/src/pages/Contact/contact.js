@@ -1,7 +1,7 @@
 import { useState } from "react";
 import emailjs from "emailjs-com";
 import { useForm } from "react-hook-form";
-import "../../Styles/contact.css";
+import "../../styles/contact.css";
 
 const Contact = () => {
   const {
@@ -35,113 +35,59 @@ const Contact = () => {
     }
   };
 
-  // Watch country for dynamic phone validation
-  const selectedCountry = watch("country");
-
-  // Country-based phone number validation patterns
-  const phoneValidationPatterns = {
-    US: /^[2-9]\d{2}[2-9](?!11)\d{6}$/, // US: (XXX) XXX-XXXX
-    EG: /^(00201|201|01)[0-9]{9}$/, // Egypt: 11-digit mobile numbers
-    UK: /^(07\d{9}|(\+44\d{10}))$/, // UK: Starts with 07 or +44
-    FR: /^(\+33|0)[1-9](\d{8})$/, // France
-    DE: /^(\+49|0)[1-9](\d{7,9})$/, // Germany
-    IN: /^[6789]\d{9}$/, // India: Starts with 6,7,8,9
-  };
-
   return (
     <section id="contact" className="contact-container">
       <div className="frame-container">
-        <h2>Contact Me</h2>
-        <p className="sub--title">Let's connect and discuss your project!</p>
+        <h2 className="section-title">
+          <span className="highlight">Get in Touch</span> with Us
+        </h2>
+        <p className="section-description">
+          Have questions about pet adoption? Need assistance? Contact us!
+        </p>
 
         <form
           className="contact-form-container"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="container">
-            {/* Name */}
-            <label className="contact-label">
-              <span>Name</span>
-              <input
-                type="text"
-                className="contact-input"
-                {...register("name", {
-                  required: "Name is required",
-                  pattern: {
-                    value: /^[A-Za-z\s]+$/,
-                    message: "Only letters are allowed",
-                  },
-                })}
-              />
-              {errors.name && (
-                <p className="error-message">{errors.name.message}</p>
-              )}
-            </label>
+          {/* Name */}
+          <label className="contact-label">
+            <span>Name</span>
+            <input
+              type="text"
+              className="contact-input"
+              {...register("name", {
+                required: "Name is required",
+                pattern: {
+                  value: /^[A-Za-z\s]+$/,
+                  message: "Only letters are allowed",
+                },
+              })}
+            />
+            {errors.name && (
+              <p className="error-message">{errors.name.message}</p>
+            )}
+          </label>
 
-            {/* Email */}
-            <label className="contact-label">
-              <span>Email</span>
-              <input
-                type="email"
-                className="contact-input"
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
-                    message: "Invalid email format",
-                  },
-                })}
-              />
-              {errors.email && (
-                <p className="error-message">{errors.email.message}</p>
-              )}
-            </label>
+          {/* Email */}
+          <label className="contact-label">
+            <span>Email</span>
+            <input
+              type="email"
+              className="contact-input"
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+                  message: "Invalid email format",
+                },
+              })}
+            />
+            {errors.email && (
+              <p className="error-message">{errors.email.message}</p>
+            )}
+          </label>
 
-            {/* Country Selection */}
-            <label className="contact-label">
-              <span>Country</span>
-              <select
-                className="contact-input"
-                {...register("country", {
-                  required: "Please select a country",
-                })}
-              >
-                <option value="">Select Your Country...</option>
-                <option value="US">🇺🇸 United States</option>
-                <option value="EG">🇪🇬 Egypt</option>
-                <option value="UK">🇬🇧 United Kingdom</option>
-                <option value="FR">🇫🇷 France</option>
-                <option value="DE">🇩🇪 Germany</option>
-                <option value="IN">🇮🇳 India</option>
-              </select>
-              {errors.country && (
-                <p className="error-message">{errors.country.message}</p>
-              )}
-            </label>
-
-            {/* Phone Number */}
-            <label className="contact-label">
-              <span>Phone Number</span>
-              <input
-                type="tel"
-                className="contact-input"
-                {...register("phone", {
-                  required: "Phone number is required",
-                  pattern: {
-                    value: selectedCountry
-                      ? phoneValidationPatterns[selectedCountry]
-                      : /^[0-9]{10,15}$/,
-                    message: "Invalid phone number format for selected country",
-                  },
-                })}
-              />
-              {errors.phone && (
-                <p className="error-message">{errors.phone.message}</p>
-              )}
-            </label>
-          </div>
-
-          {/* Topic Selection */}
+          {/* Inquiry Topic */}
           <label className="contact-label">
             <span>Topic</span>
             <select
@@ -149,12 +95,11 @@ const Contact = () => {
               {...register("topic", { required: "Please select a topic" })}
             >
               <option value="">Select One...</option>
-             
-              <option value="Bedroom">Bedroom</option>
-              <option value="Day-Complement">Day-Complement</option>
-              <option value="Kitchen">Kitchen</option>
-              <option value="Cybersecurity">Night Complement</option>
-              <option value="Networking & DevOps">OutDoor</option>
+              <option value="Adoption Process">Adoption Process</option>
+              <option value="Volunteering">Volunteering</option>
+              <option value="Donation">Donations & Support</option>
+              <option value="Pet Care Tips">Pet Care Tips</option>
+              <option value="Report a Lost Pet">Report a Lost Pet</option>
             </select>
             {errors.topic && (
               <p className="error-message">{errors.topic.message}</p>
@@ -190,7 +135,7 @@ const Contact = () => {
               type="checkbox"
               {...register("terms", { required: "You must accept the terms" })}
             />
-            <span>I accept the terms</span>
+            <span>I accept the terms and conditions.</span>
           </label>
           {errors.terms && (
             <p className="error-message">{errors.terms.message}</p>
@@ -199,7 +144,7 @@ const Contact = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="btn btn-primary contact-form-btn"
+            className="btn contact-form-btn"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Sending..." : "Send Message"}
