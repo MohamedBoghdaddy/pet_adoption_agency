@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import "../../styles/signup.css";
 import { Link, useNavigate } from "react-router-dom";
+import {  Button } from "react-bootstrap";
 
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -14,7 +15,6 @@ const Signup = () => {
     confirmPassword: "",
     gender: "",
     firstName: "",
-    middleName: "",
     lastName: "",
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -59,7 +59,6 @@ const Signup = () => {
               "name",
               "email",
               "firstName",
-              "middleName",
               "lastName",
             ].map((field) => (
               <div className="field" key={field}>
@@ -152,9 +151,9 @@ const Signup = () => {
         <div className="right-sign">
           <h1>Already have an account?</h1>
           <Link to="/login">
-            <button className="right_btn" type="button">
+            <Button className="right_btn" type="button">
               Login
-            </button>
+            </Button>
           </Link>
         </div>
       </div>

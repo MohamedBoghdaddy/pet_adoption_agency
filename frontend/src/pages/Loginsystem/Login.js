@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useLogin } from "../../hooks/useLogin";
 import "../../styles/login.css"; // Adjust the path as needed
+import {  Button } from "react-bootstrap";
 
 const Login = () => {
   const {
@@ -76,9 +77,9 @@ const Login = () => {
         <div className="right-login">
           <h1>Don't have an account?</h1>
           <Link to="/signup">
-            <button className="right_btn" type="button" disabled={isLoading}>
+            <Button className="right_btn" type="button" disabled={isLoading}>
               Signup
-            </button>
+            </Button>
           </Link>
         </div>
       </div>

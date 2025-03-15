@@ -1,3 +1,10 @@
+body {
+  margin: 0; /* Remove default margin */
+  overflow-y: auto; /* Enable vertical scroll if needed */
+  overflow-x: hidden; /* Hide horizontal scroll bar */
+  background-color:  #e9c0b5;
+}
+
 :root {
   --oyster-pink: #e8cec7;
   --tundora: #404040;

@@ -1,8 +1,11 @@
 /* ✅ Call-To-Action Section */
-body{
-      background: var(--petite-orchid); /* Soft pink background */
-
+body {
+  margin: 0; /* Remove default margin */
+  overflow-y: auto; /* Enable vertical scroll if needed */
+  overflow-x: hidden; /* Hide horizontal scroll bar */
+  background-color: #eceae6;
 }
+
 .cta-section {
   background: var(--petite-orchid); /* Soft pink background */
   color: var(--white);

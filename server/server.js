@@ -127,7 +127,9 @@ const connectDB = async () => {
     // 🌍 Start Server After DB Connection
     app.listen(PORT, () =>
       console.log(
-        `🚀 Server running on ${isProduction ? "Render" : "localhost"} at port ${PORT}`
+        `🚀 Server running on ${
+          isProduction ? "Render" : "localhost"
+        } at port ${PORT}`
       )
     );
   } catch (error) {
@@ -152,7 +154,9 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // ✅ Health Check Route
 app.get("/", (req, res) => {
   res.json({
-    message: `Hedj API is running on ${isProduction ? "Render" : "localhost"} 🚀`,
+    message: `Hedj API is running on ${
+      isProduction ? "Render" : "localhost"
+    } 🚀`,
   });
 });
 
