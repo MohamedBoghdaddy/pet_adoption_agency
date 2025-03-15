@@ -93,7 +93,14 @@ const NavBar = () => {
             >
               About Us
             </Nav.Link>
-
+            <Nav.Link
+              as={Link}
+              to="/dashboard"
+              className="nav-link"
+              onClick={handleNavCollapse}
+            >
+              Dashboard
+            </Nav.Link>
             <Nav.Link
               as={Link}
               to="/contact"
@@ -115,7 +122,7 @@ const NavBar = () => {
             )}
 
             {/* ✅ Auth Section */}
-            {isAuthenticated ? (
+            {isAuthenticated && user ? (
               <Nav.Link className="nav-link" onClick={handleLogout}>
                 <FontAwesomeIcon icon={faSignOutAlt} /> Logout
               </Nav.Link>
