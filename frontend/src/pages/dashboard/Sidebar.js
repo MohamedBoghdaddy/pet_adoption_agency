@@ -14,6 +14,7 @@ import { Modal, Button } from "react-bootstrap";
 import "../../styles/Sidebar.css";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
+import {faPaw } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = () => {
   const { state } = useAuthContext();
@@ -202,7 +203,7 @@ const Sidebar = () => {
         </li>
         <li>
           <Link to="/CreateProduct">
-            <FaCouch /> Create Product
+            <faPaw /> Add Pets
           </Link>
         </li>
         <li>
