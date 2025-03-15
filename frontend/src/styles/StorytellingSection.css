@@ -15,10 +15,10 @@ body {
 
 /* ✅ Storytelling & Slider Section */
 .storytelling-section {
+  max-width: 1000px;
   text-align: center;
   padding: 70px 0;
   background: var(--oyster-pink);
-  display: flex;
   flex-direction: column;
   align-items: center;
 }
@@ -70,7 +70,9 @@ body {
   text-align: center;
   background: var(--white);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 
 .custom-card:hover {
@@ -80,11 +82,11 @@ body {
 
 /* ✅ Card Image */
 .custom-card img {
-  width: 100%;
+    
+  width:100%;
   height: auto;
   border-radius: 12px 12px 0 0;
   max-height: 250px;
-  object-fit: cover;
 }
 
 /* ✅ Card Title */

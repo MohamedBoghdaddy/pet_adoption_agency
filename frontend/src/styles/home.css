@@ -19,40 +19,6 @@
 
 
 
-/* ✅ Virtual Showroom */
-.virtual-showroom {
-  padding: 40px 0;
-}
-
-.virtual-showroom .content {
-  text-align: left;
-  padding: 20px;
-}
-
-.virtual-showroom img {
-  max-width: 100%;
-  height: auto;
-}
-
-.virtual-showroom h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.virtual-showroom p {
-  font-size: 1rem;
-  margin-bottom: 20px;
-}
-
-.virtual-showroom .btn-dark {
-  background-color: var(--tundora);
-  border: none;
-}
-
-.virtual-showroom .btn-dark:hover {
-  background-color: var(--silver);
-  color: var(--tundora);
-}
 
 /* ✅ Contact Info */
 .contact-info {

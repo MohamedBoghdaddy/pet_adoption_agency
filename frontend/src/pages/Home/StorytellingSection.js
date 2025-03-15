@@ -56,7 +56,7 @@ const StorytellingSection = () => {
   ];
 
   return (
-    <Container className="storytelling-section">
+    <section className="storytelling-section">
       {/* ✅ Section Title */}
       <h2 className="section-title">
         Why <span className="highlight">Adopt a Pet?</span>
@@ -76,7 +76,7 @@ const StorytellingSection = () => {
           </div>
         ))}
       </Slider>
-    </Container>
+    </section>
   );
 };
 
