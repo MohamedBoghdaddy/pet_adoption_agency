@@ -1,8 +1,8 @@
-
-
-/* ✅ Hero Section */
+/* ==============================
+   ✅ Hero Section Styles
+================================= */
 .hero-section {
-  background: var(--oyster-pink); /* Background color behind image */
+  background: var(--oyster-pink);
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -53,7 +53,9 @@
   line-height: 1.6;
 }
 
-/* ✅ Search Bar */
+/* ==============================
+   ✅ Search Bar Styles
+================================= */
 .search-container {
   display: flex;
   justify-content: center;
@@ -64,7 +66,7 @@
   gap: 10px;
   max-width: 750px;
   width: 90%;
-  margin: 40px auto 0; /* Lowered */
+  margin: 40px auto 0;
 }
 
 /* ✅ Search Inputs */
@@ -102,15 +104,22 @@
   color: var(--petite-orchid);
 }
 
-/* ✅ Category Cards */
+/* ==============================
+   ✅ Category Cards
+================================= */
 .category-cards {
   display: flex;
   justify-content: center;
   gap: 20px;
+  flex-wrap: wrap;
   margin-top: 35px;
 }
 
 .category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background: rgba(255, 255, 255, 0.9);
   padding: 25px;
   border-radius: 15px;
@@ -143,7 +152,9 @@
   color: #ffffff;
 }
 
-/* ✅ Responsive Design */
+/* ==============================
+   ✅ Responsive Design
+================================= */
 @media only screen and (max-width: 768px) {
   .hero-section {
     padding: 50px 20px;
