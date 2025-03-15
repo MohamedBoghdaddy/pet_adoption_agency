@@ -1,0 +1,100 @@
+/* ✅ General Pet Page Styling */
+.pet-page {
+  text-align: center;
+  padding: 50px 0;
+}
+
+/* ✅ Title Styling */
+.pet-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--tundora);
+  margin-bottom: 15px;
+}
+
+/* ✅ Description Styling */
+.pet-description {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: var(--tundora);
+}
+
+/* ✅ Pet Card Styling */
+.pet-card {
+  background: var(--white);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.pet-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ Image Styling */
+.pet-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+/* ✅ Pet Name */
+.pet-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: var(--tundora);
+}
+
+/* ✅ Pet Info */
+.pet-info {
+  font-size: 1rem;
+  margin: 10px 0;
+  color: var(--tundora);
+}
+
+/* ✅ Adoption Button */
+.adopt-button {
+  background-color: var(--petite-orchid);
+  color: var(--white);
+  font-size: 1rem;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.adopt-button:hover {
+  background-color: var(--tundora);
+}
+
+/* ✅ Adoption Process Page */
+.adoption-page {
+  text-align: center;
+  padding: 50px;
+}
+
+.adoption-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--tundora);
+  margin-bottom: 20px;
+}
+
+.adoption-description {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: var(--tundora);
+}
+
+.adoption-steps {
+  list-style: none;
+  padding: 0;
+  font-size: 1.2rem;
+  line-height: 1.8;
+}

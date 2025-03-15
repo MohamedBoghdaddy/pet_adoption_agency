@@ -1,0 +1,47 @@
+/* ✅ Adoption Readiness Page */
+.how-to-page {
+  text-align: center;
+  padding: 50px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ✅ Title */
+.how-to-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--tundora);
+  margin-bottom: 20px;
+}
+
+/* ✅ Introduction */
+.how-to-intro {
+  font-size: 1.2rem;
+  color: var(--tundora);
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* ✅ Sections */
+.how-to-section {
+  background: var(--oyster-pink);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* ✅ Subtitle */
+.how-to-subtitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--petite-orchid);
+  margin-bottom: 10px;
+}
+
+/* ✅ Text */
+.how-to-text {
+  font-size: 1rem;
+  color: var(--tundora);
+  line-height: 1.6;
+}

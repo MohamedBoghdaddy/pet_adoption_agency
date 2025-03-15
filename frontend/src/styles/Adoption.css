@@ -1,0 +1,43 @@
+.adoption-page {
+  text-align: center;
+  padding: 50px 0;
+  background: var(--oyster-pink);
+}
+
+.adoption-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--tundora);
+  margin-bottom: 15px;
+}
+
+.adoption-description {
+  font-size: 1.2rem;
+  color: var(--tundora);
+  margin-bottom: 30px;
+}
+
+.adoption-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.adoption-form label {
+  font-weight: bold;
+  color: var(--tundora);
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 20px;
+  background-color: var(--petite-orchid);
+  border: none;
+}
+
+.submit-btn:hover {
+  background-color: var(--tundora);
+}
