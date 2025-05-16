@@ -1,0 +1,61 @@
+:root {
+    --oyster-pink: #e8cec7;
+    --tundora: #404040;
+    --petite-orchid: #da9a96;
+    --white: #ffffff;
+    --silver: #cac9c9;
+  }
+  
+  .add-pet-container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 25px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    color: var(--tundora);
+    text-align: center;
+    margin-left: 30%;
+  }
+  
+  .add-pet-container h2 {
+    margin-bottom: 20px;
+  }
+  
+  .add-pet-form label {
+    font-weight: 600;
+    color: var(--tundora);
+  }
+  
+  .image-preview img {
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 8px;
+    background: linear-gradient(45deg, var(--petite-orchid), var(--tundora));
+    border: none;
+    color: var(--white);
+    transition: background 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background: linear-gradient(45deg, var(--tundora), var(--petite-orchid));
+    transform: scale(1.02);
+  }
+
+
+  @media (max-width: 1268px) {
+    .add-pet-container{
+      padding: 20px;
+      margin-left: 22.5%;
+      margin-top: 7%;
+      width: 75%;
+    }
+  }

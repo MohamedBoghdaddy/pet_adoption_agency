@@ -1,64 +1,59 @@
-import {
-  BsGraphUp,
-  BsCartCheck,
-  BsPeople,
-  BsClipboardData,
-} from "react-icons/bs";
+import { BsCheckCircle, BsHouseDoor, BsPeople } from "react-icons/bs";
+import { FaPaw } from "react-icons/fa"; // ✅ Add this line
 import useDashboard from "../../hooks/useDashboard";
 import "../../styles/dashboard.css";
 import Chart from "react-apexcharts";
 
 const Dashboard = () => {
-  const { state } = useDashboard(); // Get dashboard data from context
+  const { state } = useDashboard();
 
-  // Extract stats from context state
   const stats = state.analytics || {
-    totalSales: 0,
-    totalOrders: 0,
-    totalCustomers: 0,
-    totalReports: 0,
-    salesTrend: [],
-    salesMonths: [],
+    totalPets: 0,
+    totalAdoptions: 0,
+    totalShelters: 0,
+    totalUsers: 0,
+    adoptionTrend: [],
+    months: [],
   };
 
-  // Chart Data for Sales Trend
   const chartData = {
-    series: [{ name: "Sales", data: stats.salesTrend || [] }],
+    series: [{ name: "Adoptions", data: stats.adoptionTrend || [] }],
     options: {
       chart: { type: "line" },
-      xaxis: { categories: stats.salesMonths || [] },
+      xaxis: { categories: stats.months || [] },
+      title: { text: "Adoption Trend Over Time" },
     },
   };
 
   return (
     <div className="dashboard-container">
-      <h2>Dashboard Overview</h2>
+      <h2>Pet Adoption Dashboard</h2>
 
       <div className="stats-container">
         <div className="stat-card">
-          <BsGraphUp className="stat-icon" />
-          <h3>${stats.totalSales}</h3>
-          <p>Total Sales</p>
+          <FaPaw className="stat-icon" />
+          <h3>{stats.totalPets}</h3>
+          <p>Available Pets</p>
         </div>
         <div className="stat-card">
-          <BsCartCheck className="stat-icon" />
-          <h3>{stats.totalOrders}</h3>
-          <p>Total Orders</p>
+          <BsCheckCircle className="stat-icon" />
+          <h3>{stats.totalAdoptions}</h3>
+          <p>Completed Adoptions</p>
+        </div>
+        <div className="stat-card">
+          <BsHouseDoor className="stat-icon" />
+          <h3>{stats.totalShelters}</h3>
+          <p>Registered Shelters</p>
         </div>
         <div className="stat-card">
           <BsPeople className="stat-icon" />
-          <h3>{stats.totalCustomers}</h3>
-          <p>Total Customers</p>
-        </div>
-        <div className="stat-card">
-          <BsClipboardData className="stat-icon" />
-          <h3>{stats.totalReports}</h3>
-          <p>Reports Generated</p>
+          <h3>{stats.totalUsers}</h3>
+          <p>Total Adopters</p>
         </div>
       </div>
 
       <div className="chart-container">
-        <h3>Sales Trend</h3>
+        <h3>Monthly Adoption Stats</h3>
         <Chart
           options={chartData.options}
           series={chartData.series}

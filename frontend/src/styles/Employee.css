@@ -176,3 +176,12 @@
     align-self: flex-end;
   }
 }
+
+@media (max-width: 1268px) {
+  .employee-container {
+    padding: 20px;
+    margin-left: 22.5%;
+    margin-top: 7%;
+    width: 75%;
+  }
+}

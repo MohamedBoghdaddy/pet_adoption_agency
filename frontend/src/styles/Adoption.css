@@ -2,6 +2,7 @@
   text-align: center;
   padding: 50px 0;
   background: var(--oyster-pink);
+  margin-top: 2%;
 }
 
 .adoption-title {
@@ -41,3 +42,5 @@
 .submit-btn:hover {
   background-color: var(--tundora);
 }
+
+

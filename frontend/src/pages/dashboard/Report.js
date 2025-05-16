@@ -1,3 +1,4 @@
+// Report.js (now AdoptionReport.js)
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { Spinner, Table } from "react-bootstrap";
@@ -15,7 +16,6 @@ import {
 } from "chart.js";
 import "../../styles/Analytics.css";
 
-// Register chart components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -25,7 +25,7 @@ ChartJS.register(
   Legend
 );
 
-const AnalyticsReport = () => {
+const AdoptionReport = () => {
   const {
     state,
     fetchDashboardData,
@@ -35,7 +35,6 @@ const AnalyticsReport = () => {
   } = useDashboard();
   const [loading, setLoading] = useState(true);
 
-  // Fetch dashboard data, profile, and reports on component mount
   useEffect(() => {
     fetchDashboardData();
     fetchProfile();
@@ -43,17 +42,18 @@ const AnalyticsReport = () => {
     setLoading(false);
   }, [fetchDashboardData, fetchProfile, fetchReports]);
 
-  const analyticsChartData = {
-    labels: ["Products", "Customers", "Employees"],
+  const adoptionChartData = {
+    labels: ["Dogs", "Cats", "Other Pets"],
     datasets: [
       {
-        label: "Count",
+        label: "Adoptions",
         data: [
-          state.products?.length || 0,
-          state.customers?.length || 0,
-          state.employees?.length || 0,
+          state.adoptions?.filter((a) => a.petType === "dog").length || 0,
+          state.adoptions?.filter((a) => a.petType === "cat").length || 0,
+          state.adoptions?.filter((a) => !["dog", "cat"].includes(a.petType))
+            .length || 0,
         ],
-        backgroundColor: ["#3498db", "#2ecc71", "#e74c3c"],
+        backgroundColor: ["#4CAF50", "#2196F3", "#FFC107"],
       },
     ],
   };
@@ -71,11 +71,10 @@ const AnalyticsReport = () => {
     <div className="analytic-container">
       <div className="main">
         <div className="main-top">
-          <h1>Analytics & Reports</h1>
+          <h1>Adoption Analytics</h1>
         </div>
 
-        {/* Chart for analytics */}
-        <h2>Business Analytics</h2>
+        <h2>Adoption Statistics</h2>
         <div
           className="chart-container"
           style={{ width: "60%", margin: "auto" }}
@@ -85,14 +84,13 @@ const AnalyticsReport = () => {
               <span className="sr-only">Loading...</span>
             </Spinner>
           ) : (
-            <Bar data={analyticsChartData} options={chartOptions} />
+            <Bar data={adoptionChartData} options={chartOptions} />
           )}
         </div>
 
-        {/* Profile Section */}
         {state.profile && (
           <>
-            <h2>Profile Information</h2>
+            <h2>Staff Information</h2>
             <Table striped bordered hover>
               <tbody>
                 <tr>
@@ -112,14 +110,13 @@ const AnalyticsReport = () => {
           </>
         )}
 
-        {/* Settings Section */}
-        <h2>Settings</h2>
+        <h2>Shelter Settings</h2>
         {state.settings ? (
           <Table striped bordered hover>
             <tbody>
               <tr>
-                <td>Mode</td>
-                <td>{state.settings.mode}</td>
+                <td>Adoption Process</td>
+                <td>{state.settings.adoptionProcess}</td>
               </tr>
               <tr>
                 <td>Notifications</td>
@@ -131,8 +128,7 @@ const AnalyticsReport = () => {
           <p>No settings available.</p>
         )}
 
-        {/* Reports Section */}
-        <h2>Reports</h2>
+        <h2>Adoption Reports</h2>
         <div className="report-container">
           <div className="report-list">
             {state.reports?.length > 0 ? (
@@ -142,6 +138,7 @@ const AnalyticsReport = () => {
                   <div className="report-info">
                     <h4>{report.title}</h4>
                     <p>{new Date(report.date).toLocaleDateString()}</p>
+                    <p>Type: {report.type || "General"}</p>
                   </div>
                   <button
                     onClick={() => handleDownload(report.id)}
@@ -161,4 +158,4 @@ const AnalyticsReport = () => {
   );
 };
 
-export default AnalyticsReport;
+export default AdoptionReport;

@@ -17,6 +17,7 @@ body {
   background-color: var(--tundora); /* Dark gray */
   color: var(--white);
   padding: 50px 0;
+  margin-top: 20%;
 }
 
 .footer-container {

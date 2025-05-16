@@ -18,6 +18,7 @@ import Bunnies from "./pages/pets/Bunnies";
 import Others from "./pages/pets/Others";
 import Adoption from "./pages/adopt/Adoption";
 import HowTo from "./pages/Home/HowTo";
+import AddPet from "./pages/dashboard/AddPet";
 
 function App() {
   return (
@@ -175,6 +176,17 @@ function App() {
               <NavBar />
               <Sidebar />
               <Employees />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/AddPet"
+          element={
+            <>
+              <NavBar />
+              <Sidebar />
+              <AddPet />
               <Footer />
             </>
           }

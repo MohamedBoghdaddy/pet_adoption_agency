@@ -1,8 +1,9 @@
+// Sidebar.js (updated for pet adoption)
 import React, { useState, useEffect, useRef } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { Link } from "react-router-dom";
 import {
-  FaCouch,
+  FaPaw,
   FaChartLine,
   FaTools,
   FaEye,
@@ -14,13 +15,11 @@ import { Modal, Button } from "react-bootstrap";
 import "../../styles/Sidebar.css";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
-import {faPaw } from "@fortawesome/free-solid-svg-icons";
 
 const Sidebar = () => {
   const { state } = useAuthContext();
   const { user, isAuthenticated } = state;
 
-  // Profile state
   const [profilePhoto, setProfilePhoto] = useState(user?.profilePhoto || null);
   const [image, setImage] = useState(null);
   const [scale, setScale] = useState(1.2);
@@ -31,7 +30,6 @@ const Sidebar = () => {
 
   const editorRef = useRef(null);
 
-  // Load profile photo from localStorage or user data
   useEffect(() => {
     const savedProfilePhoto = localStorage.getItem("profilePhoto");
     if (savedProfilePhoto) {
@@ -41,42 +39,36 @@ const Sidebar = () => {
     }
   }, [user]);
 
-  // Toggle edit mode
   const toggleEdit = () => {
     setIsEditing((prev) => !prev);
     setImage(null);
   };
 
-  // Handle file selection
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       setImage(file);
-      setError(""); // Clear previous errors
-      localStorage.removeItem("profilePhoto"); // Remove previous image
+      setError("");
+      localStorage.removeItem("profilePhoto");
     }
   };
 
-  // Handle profile photo upload
   const handleSave = async () => {
     if (editorRef.current) {
       const canvas = editorRef.current.getImageScaledToCanvas();
       const dataUrl = canvas.toDataURL();
 
       try {
-        // Convert to Blob for backend upload
         const blob = await fetch(dataUrl).then((res) => res.blob());
         const formData = new FormData();
         formData.append("photoFile", blob, "profile-photo.png");
 
-        // Upload to backend
         const response = await axios.put(
           `http://localhost:8000/api/users/update/${user._id}`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
 
-        // Update profile state
         const updatedProfilePhoto = response.data.user.profilePhoto;
         setProfilePhoto(updatedProfilePhoto);
         localStorage.setItem("profilePhoto", updatedProfilePhoto);
@@ -90,13 +82,11 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      {/* Sidebar Header */}
       <div className="sidebar-header">
         <h2>
           {isAuthenticated && user ? `Welcome, ${user.username}` : "Guest"}
         </h2>
 
-        {/* Profile Section */}
         {isAuthenticated && (
           <div className="profile-photo-section">
             {profilePhoto || isEditing ? (
@@ -108,10 +98,10 @@ const Sidebar = () => {
                 />
                 <div className="icon-buttons">
                   <button onClick={toggleEdit}>
-                    <FaEdit /> {/* Edit Icon */}
+                    <FaEdit />
                   </button>
                   <button onClick={() => setShowPreview(true)}>
-                    <FaEye /> {/* Preview Icon */}
+                    <FaEye />
                   </button>
                 </div>
               </>
@@ -169,7 +159,6 @@ const Sidebar = () => {
         )}
       </div>
 
-      {/* Profile Photo Preview Modal */}
       <Modal show={showPreview} onHide={() => setShowPreview(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Profile Photo Preview</Modal.Title>
@@ -184,35 +173,39 @@ const Sidebar = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Sidebar Menu */}
       <ul className="sidebar-menu">
         <li>
-          <Link to="/Reports">
-            <FaChartLine /> Analytics
+          <Link to="/dashboard">
+            <FaPaw /> Dashboard
           </Link>
         </li>
         <li>
-          <Link to="/Customers">
-            <BsPersonCircle /> Customers
+          <Link to="/reports">
+            <FaChartLine /> Adoption Reports
+          </Link>
+        </li>
+        {/* <li>
+          <Link to="/customers">
+            <BsPersonCircle /> Adopters
+          </Link>
+        </li> */}
+        <li>
+          <Link to="/employees">
+            <FaUsers /> Staff
           </Link>
         </li>
         <li>
-          <Link to="/Employees">
-            <BsPersonCircle /> Employees
+          <Link to="/addpet">
+            <FaPaw /> Add Pet
           </Link>
         </li>
-        <li>
-          <Link to="/CreateProduct">
-            <faPaw /> Add Pets
-          </Link>
-        </li>
-        <li>
-          <Link to="/Profile">
+        {/* <li>
+          <Link to="/profile">
             <FaUsers /> Profile
           </Link>
-        </li>
+        </li> */}
         <li>
-          <Link to="/settings">
+          <Link to="/Setting">
             <FaTools /> Settings
           </Link>
         </li>

@@ -1,3 +1,4 @@
+// Employees.js (now Staff.js)
 import { useState, useEffect } from "react";
 import { BsPersonBadge, BsSearch, BsThreeDotsVertical } from "react-icons/bs";
 import useDashboard from "../../hooks/useDashboard";
@@ -5,7 +6,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { Button, Form, Modal, Spinner, Alert } from "react-bootstrap";
 import "../../styles/Employee.css";
 
-const Employee = () => {
+const Staff = () => {
   const { user } = useAuthContext();
   const {
     state,
@@ -21,21 +22,18 @@ const Employee = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Default employee structure
   const [selectedEmployee, setSelectedEmployee] = useState({
     fname: "",
     lname: "",
     email: "",
-    role: "employee",
-    department: "",
+    role: "staff",
+    position: "",
   });
 
-  // ✅ Fetch employees on mount
   useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
-  // ✅ Filter Employees based on Search Query
   const filteredEmployees =
     state.employees?.filter((employee) =>
       `${employee.fname} ${employee.lname}`
@@ -43,7 +41,6 @@ const Employee = () => {
         .includes(searchQuery.toLowerCase())
     ) || [];
 
-  // ✅ Handle Modal Open/Close
   const handleOpenModal = (employee = null) => {
     setSelectedEmployee(
       employee
@@ -51,10 +48,10 @@ const Employee = () => {
             fname: employee.fname || "",
             lname: employee.lname || "",
             email: employee.email || "",
-            role: employee.role || "employee",
-            department: employee.department || "",
+            role: employee.role || "staff",
+            position: employee.position || "",
           }
-        : { fname: "", lname: "", email: "", role: "employee", department: "" }
+        : { fname: "", lname: "", email: "", role: "staff", position: "" }
     );
     setEditMode(!!employee);
     setShowModal(true);
@@ -65,7 +62,6 @@ const Employee = () => {
     setError("");
   };
 
-  // ✅ Handle Input Change
   const handleChange = (e) => {
     setSelectedEmployee({
       ...selectedEmployee,
@@ -73,7 +69,6 @@ const Employee = () => {
     });
   };
 
-  // ✅ Handle Employee Creation or Update
   const handleSubmit = async () => {
     setIsLoading(true);
     setError("");
@@ -98,21 +93,20 @@ const Employee = () => {
       handleCloseModal();
       fetchDashboardData();
     } catch (err) {
-      setError("❌ Error saving employee. Try again.");
+      setError("❌ Error saving staff member. Try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // ✅ Handle Employee Deletion with Confirmation
   const handleDelete = async (employeeId) => {
-    if (window.confirm("Are you sure you want to delete this employee?")) {
+    if (window.confirm("Are you sure you want to delete this staff member?")) {
       setIsLoading(true);
       try {
         await handleDeleteEmployee(employeeId);
         fetchDashboardData();
       } catch (err) {
-        setError("❌ Error deleting employee.");
+        setError("❌ Error deleting staff member.");
       } finally {
         setIsLoading(false);
       }
@@ -122,19 +116,19 @@ const Employee = () => {
   return (
     <div className="employee-container">
       <div className="header">
-        <h2>Employees</h2>
+        <h2>Shelter Staff</h2>
         <div className="search-bar">
           <BsSearch className="search-icon" />
           <input
             type="text"
-            placeholder="Search employees..."
+            placeholder="Search staff..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         {user?.role === "admin" && (
           <Button onClick={() => handleOpenModal()} variant="success">
-            + Add Employee
+            + Add Staff Member
           </Button>
         )}
       </div>
@@ -158,6 +152,7 @@ const Employee = () => {
                 <span className={`role-badge ${employee.role}`}>
                   {employee.role}
                 </span>
+                {employee.position && <p>Position: {employee.position}</p>}
               </div>
               {user?.role === "admin" && (
                 <div className="employee-actions">
@@ -177,15 +172,14 @@ const Employee = () => {
             </div>
           ))
         ) : (
-          <p className="no-results">No employees found.</p>
+          <p className="no-results">No staff members found.</p>
         )}
       </div>
 
-      {/* ✅ Employee Form Modal */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {editMode ? "Edit Employee" : "Add Employee"}
+            {editMode ? "Edit Staff Member" : "Add Staff Member"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -232,19 +226,20 @@ const Employee = () => {
                 value={selectedEmployee.role}
                 onChange={handleChange}
               >
-                <option value="employee">Employee</option>
+                <option value="staff">Staff</option>
                 <option value="admin">Admin</option>
+                <option value="volunteer">Volunteer</option>
               </Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="department">
-              <Form.Label>Department</Form.Label>
+            <Form.Group controlId="position">
+              <Form.Label>Position</Form.Label>
               <Form.Control
                 type="text"
-                name="department"
-                value={selectedEmployee.department}
+                name="position"
+                value={selectedEmployee.position}
                 onChange={handleChange}
-                required
+                placeholder="e.g., Adoption Counselor, Veterinarian"
               />
             </Form.Group>
           </Form>
@@ -257,9 +252,9 @@ const Employee = () => {
             {isLoading ? (
               <Spinner size="sm" animation="border" />
             ) : editMode ? (
-              "Update Employee"
+              "Update Staff"
             ) : (
-              "Add Employee"
+              "Add Staff"
             )}
           </Button>
         </Modal.Footer>
@@ -268,4 +263,4 @@ const Employee = () => {
   );
 };
 
-export default Employee;
+export default Staff;

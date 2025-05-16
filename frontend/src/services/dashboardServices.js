@@ -7,62 +7,66 @@ const API_URL =
     ? "http://localhost:8000"
     : "https://hedj.onrender.com");
 
-// ✅ Employee API Calls
-export const fetchEmployees = async () => {
-  return axios.get(`${API_URL}/api/employees/getall`, {
+// ✅ Staff API Calls (previously Employees)
+export const fetchStaff = async () => {
+  return axios.get(`${API_URL}/api/staff/getall`, {
     withCredentials: true,
   });
 };
 
-export const createEmployee = async (employeeData) => {
-  return axios.post(`${API_URL}/api/employees/create`, employeeData, {
+export const createStaff = async (staffData) => {
+  return axios.post(`${API_URL}/api/staff/create`, staffData, {
     withCredentials: true,
   });
 };
 
-export const updateEmployee = async (id, updatedData) => {
-  return axios.put(`${API_URL}/api/employees/update/${id}`, updatedData, {
+export const updateStaff = async (id, updatedData) => {
+  return axios.put(`${API_URL}/api/staff/update/${id}`, updatedData, {
     withCredentials: true,
   });
 };
 
-export const deleteEmployee = async (id) => {
-  return axios.delete(`${API_URL}/api/employees/delete/${id}`, {
+export const deleteStaff = async (id) => {
+  return axios.delete(`${API_URL}/api/staff/delete/${id}`, {
     withCredentials: true,
   });
 };
 
-// ✅ Product API Calls
-export const fetchProducts = async () => {
-  return axios.get(`${API_URL}/api/products`, { withCredentials: true });
+// ✅ Pets API Calls (previously Products)
+export const fetchPets = async () => {
+  return axios.get(`${API_URL}/api/pets`, { withCredentials: true });
 };
 
-export const createProduct = async (productData) => {
-  return axios.post(`${API_URL}/api/products`, productData, {
+export const createPet = async (petData) => {
+  return axios.post(`${API_URL}/api/pets`, petData, {
     withCredentials: true,
   });
 };
 
-export const updateProduct = async (id, updatedData) => {
-  return axios.put(`${API_URL}/api/products/${id}`, updatedData, {
+export const updatePet = async (id, updatedData) => {
+  return axios.put(`${API_URL}/api/pets/${id}`, updatedData, {
     withCredentials: true,
   });
 };
 
-export const deleteProduct = async (id) => {
-  return axios.delete(`${API_URL}/api/products/${id}`, {
+export const deletePet = async (id) => {
+  return axios.delete(`${API_URL}/api/pets/${id}`, {
     withCredentials: true,
   });
 };
 
-// ✅ Analytics API Call
-export const fetchAnalytics = async () => {
-  return axios.get(`${API_URL}/api/analytics`, { withCredentials: true });
+// ✅ Adoption Analytics API Call
+export const fetchAdoptionAnalytics = async () => {
+  return axios.get(`${API_URL}/api/adoption-analytics`, {
+    withCredentials: true,
+  });
 };
 
-// ✅ Settings API Call
-export const fetchSettings = async () => {
-  return axios.get(`${API_URL}/api/settings`, { withCredentials: true });
+// ✅ Shelter Settings API Call
+export const fetchShelterSettings = async () => {
+  return axios.get(`${API_URL}/api/shelter-settings`, {
+    withCredentials: true,
+  });
 };
 
 // ✅ User Profile API Calls
@@ -76,24 +80,133 @@ export const updateUserProfile = async (userId, updatedProfile) => {
   });
 };
 
-/**
- * ✅ Fetch users and filter customers
- * @returns {Promise<Array>} - List of customers only
- */
-export const fetchCustomers = async () => {
+// ✅ Adopters API Calls (previously Customers)
+export const fetchAdopters = async () => {
   try {
-    console.log("📢 Fetching all users...");
+    console.log("📢 Fetching all adopters...");
     const response = await axios.get(`${API_URL}/api/users`, {
       withCredentials: true,
     });
 
-    // ✅ Filter only customers
-    const customers = response.data.filter(user => user.role === "customer");
+    // Filter only adopters
+    const adopters = response.data.filter((user) => user.role === "adopter");
 
-    console.log(`✅ ${customers.length} Customers Fetched:`, customers);
-    return customers; // Return only customers
+    console.log(`✅ ${adopters.length} Adopters Fetched:`, adopters);
+    return adopters;
   } catch (error) {
-    console.error("❌ Error Fetching Customers:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Failed to fetch customers");
+    console.error(
+      "❌ Error Fetching Adopters:",
+      error.response?.data || error.message
+    );
+    throw new Error(
+      error.response?.data?.message || "Failed to fetch adopters"
+    );
+  }
+};
+
+// ✅ Adoption Applications API Calls
+export const fetchAdoptionApplications = async () => {
+  return axios.get(`${API_URL}/api/adoption-applications`, {
+    withCredentials: true,
+  });
+};
+
+export const createAdoptionApplication = async (applicationData) => {
+  return axios.post(`${API_URL}/api/adoption-applications`, applicationData, {
+    withCredentials: true,
+  });
+};
+
+export const updateAdoptionApplication = async (id, updatedData) => {
+  return axios.put(`${API_URL}/api/adoption-applications/${id}`, updatedData, {
+    withCredentials: true,
+  });
+};
+
+export const approveAdoptionApplication = async (id) => {
+  return axios.patch(
+    `${API_URL}/api/adoption-applications/${id}/approve`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+};
+
+export const rejectAdoptionApplication = async (id) => {
+  return axios.patch(
+    `${API_URL}/api/adoption-applications/${id}/reject`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+};
+
+// ✅ Pet Medical Records API Calls
+export const fetchMedicalRecords = async (petId) => {
+  return axios.get(`${API_URL}/api/pets/${petId}/medical-records`, {
+    withCredentials: true,
+  });
+};
+
+export const addMedicalRecord = async (petId, recordData) => {
+  return axios.post(
+    `${API_URL}/api/pets/${petId}/medical-records`,
+    recordData,
+    {
+      withCredentials: true,
+    }
+  );
+};
+
+// ✅ Shelter Resources API Calls
+export const fetchShelterResources = async () => {
+  return axios.get(`${API_URL}/api/shelter-resources`, {
+    withCredentials: true,
+  });
+};
+
+export const updateShelterResources = async (resourcesData) => {
+  return axios.put(`${API_URL}/api/shelter-resources`, resourcesData, {
+    withCredentials: true,
+  });
+};
+
+// ✅ Adoption Reports API Calls
+export const fetchReports = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/api/adoption-reports`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching adoption reports:", error);
+    throw error;
+  }
+};
+
+export const generateAdoptionReport = async (reportData) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/adoption-reports/generate`, reportData, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error generating adoption report:", error);
+    throw error;
+  }
+};
+
+export const downloadReport = async (reportId) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/adoption-reports/download/${reportId}`, {
+      withCredentials: true,
+      responseType: 'blob' // Important for file downloads
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error downloading report:", error);
+    throw error;
   }
 };

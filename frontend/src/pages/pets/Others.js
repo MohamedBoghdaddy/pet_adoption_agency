@@ -1,11 +1,14 @@
-import { Container } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 import Slider from "react-slick";
 import "../../styles/PetPage.css";
 import reptile1 from "../../Assets/Images/reptile1.jpg";
 import hamster1 from "../../Assets/Images/hamster1.jpg";
 import fish1 from "../../Assets/Images/fish1.jpg";
+import { useNavigate } from "react-router-dom";
 
 const Others = () => {
+  const navigate = useNavigate();
+
   const sliderSettings = {
     dots: true,
     infinite: true,
@@ -19,6 +22,25 @@ const Others = () => {
     ],
   };
 
+  // 🐾 Descriptions for each image
+  const petData = [
+    {
+      img: reptile1,
+      description:
+        "🌿 Meet Slinky! A calm reptile who loves to bask in the sun.",
+    },
+    {
+      img: hamster1,
+      description:
+        "🌀 Say hi to Nibbles! A playful hamster who spins with joy.",
+    },
+    {
+      img: fish1,
+      description:
+        "🌊 Splash is a shimmering fish who brings peace and beauty.",
+    },
+  ];
+
   return (
     <Container className="pet-page">
       <h1 className="pet-title">🐾 Adopt Other Pets</h1>
@@ -26,9 +48,17 @@ const Others = () => {
         From reptiles to small mammals, find a unique pet today!
       </p>
       <Slider {...sliderSettings}>
-        {[reptile1, hamster1, fish1].map((img, index) => (
+        {petData.map((pet, index) => (
           <div key={index} className="pet-card">
-            <img src={img} alt="Pet" className="pet-image" />
+            <img src={pet.img} alt="Pet" className="pet-image" />
+            <p className="pet-info">{pet.description}</p>
+            <Button
+              variant="primary"
+              className="adopt-button"
+              onClick={() => navigate("/adoption")}
+            >
+              Start Adoption →
+            </Button>
           </div>
         ))}
       </Slider>

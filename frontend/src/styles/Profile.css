@@ -6,180 +6,173 @@
   --silver: #cac9c9;
 }
 
-/* General Profile Container */
+/* ==============================
+   ✅ Profile Container
+============================== */
 .profile-container {
   max-width: 600px;
   margin: 50px auto;
-  padding: 20px;
-  background-color: #f4f6f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-/* Profile Card */
+/* ✅ Profile Card */
 .profile-card {
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Profile Icon */
+/* ✅ Profile Icon */
 .profile-icon {
   font-size: 80px;
-  color: #3498db;
+  color: var(--petite-orchid);
   margin-bottom: 15px;
 }
 
-/* Profile Info */
+/* ✅ Profile Info */
 .profile-info h3 {
   margin: 10px 0;
-  color: #2c3e50;
+  color: var(--tundora);
   font-size: 22px;
 }
 
 .profile-info p {
   font-size: 16px;
-  color: #7f8c8d;
+  color: var(--silver);
   margin: 5px 0;
 }
 
-/* Profile Edit Mode */
+/* ✅ Profile Edit Form */
 .profile-edit {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
   max-width: 350px;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .profile-edit input {
-  padding: 10px;
-  border: 1px solid #bdc3c7;
-  border-radius: 5px;
-  transition: border-color 0.3s;
+  padding: 12px;
+  border: 1px solid var(--silver);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
 }
 
 .profile-edit input:focus {
-  border-color: #3498db;
+  border-color: var(--petite-orchid);
   outline: none;
 }
 
-/* Edit & Save Buttons */
+/* ✅ Edit & Save Buttons */
 .edit-button,
 .profile-edit button {
-  margin-top: 15px;
-  background-color: #3498db;
-  color: white;
+  margin-top: 10px;
+  background-color: var(--petite-orchid);
+  color: var(--white);
   font-size: 16px;
   font-weight: bold;
   padding: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
 .edit-button:hover,
 .profile-edit button:hover {
-  background-color: #2980b9;
+  background-color: var(--tundora);
 }
-/* Photo Upload Container */
+
+/* ==============================
+   ✅ Photo Upload Section
+============================== */
 .photo-upload-container {
-  max-width: 400px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #f4f6f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 25px;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-/* Form Styling */
+/* ✅ Upload Form */
 #photo {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-/* File Input Styling */
+/* ✅ Input Field */
 .form-control {
-  padding: 10px;
-  border: 2px solid #bdc3c7;
-  border-radius: 6px;
-  transition: border-color 0.3s, background 0.3s;
+  padding: 12px;
+  border: 2px solid var(--silver);
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
 }
 
 .form-control:focus {
-  border-color: #3498db;
+  border-color: var(--petite-orchid);
   outline: none;
-  background: #ecf6ff;
+  background: #fefefe;
 }
 
-/* Upload Button */
+/* ✅ Upload Button */
 .upload-btn {
-  background-color: #3498db;
-  color: white;
+  background-color: var(--petite-orchid);
+  color: var(--white);
   font-size: 16px;
   font-weight: bold;
   padding: 10px 15px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .upload-btn:hover {
-  background-color: #2980b9;
+  background-color: var(--tundora);
   transform: scale(1.03);
 }
 
 .upload-btn:active {
-  background-color: #2471a3;
-  transform: scale(0.98);
+  background-color: #2e2e2e;
+  transform: scale(0.97);
 }
 
-/* Status Messages */
-.upload-status,
-.text-danger {
+/* ✅ Status Messages */
+.upload-status {
+  color: #2ecc71;
   font-size: 14px;
   font-weight: bold;
   margin-top: 10px;
 }
 
-/* Success Message */
-.upload-status {
-  color: #2ecc71;
-}
-
-/* Error Message */
 .text-danger {
   color: #e74c3c;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-  .photo-upload-container {
-    max-width: 90%;
-    padding: 15px;
-  }
-
-  .upload-btn {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-}
-
-/* Responsive Design */
+/* ==============================
+   ✅ Responsive Design
+============================== */
 @media (max-width: 768px) {
-  .profile-container {
-    max-width: 90%;
-    padding: 15px;
+  .profile-container,
+  .photo-upload-container {
+    width: 90%;
+    padding: 20px;
   }
 
   .profile-icon {
@@ -190,12 +183,10 @@
     font-size: 20px;
   }
 
-  .profile-info p {
-    font-size: 14px;
-  }
-
+  .profile-info p,
   .edit-button,
-  .profile-edit button {
+  .profile-edit button,
+  .upload-btn {
     font-size: 14px;
     padding: 8px;
   }

@@ -9,168 +9,273 @@ import PropTypes from "prop-types";
 import { useAuthContext } from "./AuthContext";
 import { toast } from "react-toastify";
 import {
-  fetchProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-} from "../services/productServices"; // ✅ Only relevant services
+  fetchPets,
+  createPet,
+  updatePet,
+  deletePet,
+  fetchAdopters,
+  fetchAdoptionApplications,
+  fetchReports,
+  generateAdoptionReport,
+  downloadReport,
+} from "../services/dashboardServices";
 import axios from "axios";
 
-// ✅ API Base URL
+// API Base URL
 const API_URL =
   process.env.REACT_APP_API_URL ??
   (window.location.hostname === "localhost"
     ? "http://localhost:8000"
     : "https://hedj.onrender.com");
 
-// ✅ Create Context
+// Create Context
 export const DashboardContext = createContext();
 
-// ✅ Initial State
+// Initial State
 const initialState = {
-  products: [],
+  pets: [],
+  adopters: [],
+  adoptionApplications: [],
+  reports: [],
   profile: null,
   loading: true,
   error: null,
+  analytics: {
+    totalAdoptions: 0,
+    totalPets: 0,
+    totalAdopters: 0,
+    adoptionTrend: [],
+    adoptionMonths: [],
+  },
 };
 
-// ✅ Reducer Function
+// Reducer Function
 const dashboardReducer = (state, action) => {
   switch (action.type) {
     case "FETCH_SUCCESS":
-      console.log("✅ FETCH_SUCCESS - Updated State:", action.payload);
       return { ...state, ...action.payload, loading: false, error: null };
     case "FETCH_ERROR":
-      console.error("❌ FETCH_ERROR - Dashboard Fetch Failed:", action.payload);
       return { ...state, loading: false, error: action.payload };
     case "UPDATE_PROFILE":
-      console.log("✅ PROFILE UPDATED:", action.payload);
       return { ...state, profile: action.payload };
+    case "UPDATE_ANALYTICS":
+      return { ...state, analytics: action.payload };
     default:
       return state;
   }
 };
 
-// ✅ Provider Component
+// Provider Component
 export const DashboardProvider = ({ children }) => {
   const { state: authState } = useAuthContext();
   const { user, isAuthenticated } = authState;
   const [state, dispatch] = useReducer(dashboardReducer, initialState);
 
-  // ✅ Fetch Dashboard Data
+  // Fetch Dashboard Data
   const fetchDashboardData = useCallback(async () => {
     if (!isAuthenticated || !user) return;
 
     try {
-      console.log("🔹 Fetching dashboard data...");
-
-      const [productsRes, profileRes] = await Promise.allSettled([
-        fetchProducts(), // ✅ Using productServices.js
+      const [
+        petsRes,
+        adoptersRes,
+        applicationsRes,
+        reportsRes,
+        profileRes,
+        analyticsRes,
+      ] = await Promise.allSettled([
+        fetchPets(),
+        fetchAdopters(),
+        fetchAdoptionApplications(),
+        fetchReports(),
         user?._id
           ? axios.get(`${API_URL}/api/users/${user._id}`, {
               withCredentials: true,
             })
           : Promise.resolve({ status: "fulfilled", value: { data: null } }),
+        axios.get(`${API_URL}/api/adoption-analytics`, {
+          withCredentials: true,
+        }),
       ]);
-
-      console.log("✅ API responses received");
 
       dispatch({
         type: "FETCH_SUCCESS",
         payload: {
-          products: productsRes.status === "fulfilled" ? productsRes.value : [],
+          pets: petsRes.status === "fulfilled" ? petsRes.value : [],
+          adopters: adoptersRes.status === "fulfilled" ? adoptersRes.value : [],
+          adoptionApplications:
+            applicationsRes.status === "fulfilled" ? applicationsRes.value : [],
+          reports: reportsRes.status === "fulfilled" ? reportsRes.value : [],
           profile:
             profileRes.status === "fulfilled" ? profileRes.value.data : null,
         },
       });
+
+      if (analyticsRes.status === "fulfilled") {
+        dispatch({
+          type: "UPDATE_ANALYTICS",
+          payload: analyticsRes.value.data,
+        });
+      }
     } catch (error) {
-      console.error("❌ Error fetching dashboard data:", error.message);
       dispatch({
         type: "FETCH_ERROR",
         payload: error.response?.data?.message || "Failed to load dashboard",
       });
+      toast.error("Failed to load dashboard data");
     }
   }, [isAuthenticated, user]);
 
-  // ✅ CRUD Functions for Products (Using `productServices.js`)
-  const handleCreateProduct = useCallback(
-    async (productData) => {
+  // Pet Management Functions
+  const handleCreatePet = useCallback(
+    async (petData) => {
       try {
-        await createProduct(productData);
+        await createPet(petData);
         fetchDashboardData();
-        toast.success("✅ Product added successfully!");
+        toast.success("Pet added successfully!");
       } catch (error) {
-        toast.error("❌ Error creating product");
+        toast.error("Error creating pet record");
       }
     },
     [fetchDashboardData]
   );
 
-  const handleUpdateProduct = useCallback(
+  const handleUpdatePet = useCallback(
     async (id, updatedData) => {
       try {
-        await updateProduct(id, updatedData);
+        await updatePet(id, updatedData);
         fetchDashboardData();
-        toast.success("✅ Product updated successfully!");
+        toast.success("Pet updated successfully!");
       } catch (error) {
-        toast.error("❌ Error updating product");
+        toast.error("Error updating pet record");
       }
     },
     [fetchDashboardData]
   );
 
-  const handleDeleteProduct = useCallback(
+  const handleDeletePet = useCallback(
     async (id) => {
       try {
-        await deleteProduct(id);
+        await deletePet(id);
         fetchDashboardData();
-        toast.success("✅ Product deleted successfully!");
+        toast.success("Pet removed successfully!");
       } catch (error) {
-        toast.error("❌ Error deleting product");
+        toast.error("Error deleting pet record");
       }
     },
     [fetchDashboardData]
   );
 
-  // ✅ Fetch Profile Data
+  // Adoption Application Functions
+  const handleApproveApplication = useCallback(
+    async (applicationId) => {
+      try {
+        await axios.patch(
+          `${API_URL}/api/adoption-applications/${applicationId}/approve`,
+          {},
+          { withCredentials: true }
+        );
+        fetchDashboardData();
+        toast.success("Application approved!");
+      } catch (error) {
+        toast.error("Error approving application");
+      }
+    },
+    [fetchDashboardData]
+  );
+
+  const handleRejectApplication = useCallback(
+    async (applicationId) => {
+      try {
+        await axios.patch(
+          `${API_URL}/api/adoption-applications/${applicationId}/reject`,
+          {},
+          { withCredentials: true }
+        );
+        fetchDashboardData();
+        toast.success("Application rejected");
+      } catch (error) {
+        toast.error("Error rejecting application");
+      }
+    },
+    [fetchDashboardData]
+  );
+
+  // Report Functions
+  const handleGenerateReport = useCallback(
+    async (reportData) => {
+      try {
+        await generateAdoptionReport(reportData);
+        fetchDashboardData();
+        toast.success("Report generated successfully!");
+      } catch (error) {
+        toast.error("Error generating report");
+      }
+    },
+    [fetchDashboardData]
+  );
+
+  const handleDownloadReport = useCallback(async (reportId) => {
+    try {
+      const blob = await downloadReport(reportId);
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `adoption-report-${reportId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      toast.error("Error downloading report");
+    }
+  }, []);
+
+  // Fetch Profile Data
   const fetchProfile = useCallback(async () => {
     if (!user?._id) return;
 
-    console.log("🔍 Fetching User Profile...");
     try {
       const response = await axios.get(`${API_URL}/api/users/${user._id}`, {
         withCredentials: true,
       });
-      console.log("👤 Profile Fetched:", response.data);
       dispatch({ type: "UPDATE_PROFILE", payload: response.data });
     } catch (error) {
-      toast.error("❌ Failed to load profile.");
-      console.error("❌ Error Fetching Profile:", error);
+      toast.error("Failed to load profile.");
     }
   }, [user]);
 
+  // Initial Data Fetch
   useEffect(() => {
     fetchDashboardData();
     fetchProfile();
   }, [fetchDashboardData, fetchProfile]);
 
-  // ✅ Context Value (Memoized)
+  // Context Value
   const contextValue = useMemo(
     () => ({
       state,
       fetchDashboardData,
       fetchProfile,
-      handleCreateProduct,
-      handleUpdateProduct,
-      handleDeleteProduct,
+      fetchReports,
+      handleCreatePet,
+      handleUpdatePet,
+      handleDeletePet,
+      handleApproveApplication,
+      handleRejectApplication,
+      handleGenerateReport,
+      handleDownloadReport,
     }),
     [
       state,
       fetchDashboardData,
       fetchProfile,
-      handleCreateProduct,
-      handleUpdateProduct,
-      handleDeleteProduct,
+      handleCreatePet,
+      handleUpdatePet,
+      handleDeletePet,
+      handleApproveApplication,
+      handleRejectApplication,
+      handleGenerateReport,
+      handleDownloadReport,
     ]
   );
 
@@ -181,7 +286,6 @@ export const DashboardProvider = ({ children }) => {
   );
 };
 
-// ✅ Prop Types Validation
 DashboardProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
