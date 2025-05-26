@@ -1,11 +1,11 @@
 import express from "express";
-import Report from "../models/Report.js"; // Make sure to use .js extension for ES modules
+import Report from "../model/Report.js"; // Make sure to use .js extension for ES modules
 import {
   createAdoptionRequest,
   getAllAdoptionRequests,
   updateAdoptionStatus,
   getApprovedRequests,
-} from "../controllers/adoptionController.js";
+} from "../controller/adoptionController.js";
 import { generatePDF } from "../utils/pdfGenerator.js"; // Import your PDF generator
 
 const router = express.Router();

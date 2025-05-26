@@ -1,4 +1,4 @@
-import AdoptionRequest from "../models/AdoptionRequest.js";
+import AdoptionRequest from "../model/AdoptionRequest.js";
 
 // Create a new adoption request
 export const createAdoptionRequest = async (req, res) => {
