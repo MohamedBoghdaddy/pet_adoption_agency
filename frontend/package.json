@@ -1,6 +1,22 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
+  "name": "pet-adoption-frontend",
+  "description": "React frontend for Pet Adoption Agency built with Create React App",
+  "main": "index.js",
+  "author": "Mohamed Boghdaddy",
+  "license": "ISC",
+  "scripts": {
+    "start": "cross-env NODE_OPTIONS=--max_old_space_size=8192 react-scripts start",
+    "build": "cross-env NODE_OPTIONS=--max_old_space_size=8192 react-scripts build",
+    "test": "cross-env NODE_OPTIONS=--max_old_space_size=8192 react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint ./src --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
   "dependencies": {
     "@ap.cx/react-fullpage": "^0.3.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.16.5",
@@ -28,7 +44,6 @@
     "chart.js": "^4.4.3",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
-    "emailjs-com": "^3.2.0",
     "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
     "express-session": "^1.18.0",
@@ -59,16 +74,18 @@
     "swiper": "^11.1.4",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "cross-env NODE_OPTIONS=--max_old_space_size=8192 react-scripts start",
-    "build": "cross-env NODE_OPTIONS=--max_old_space_size=8192 react-scripts build",
-    "test": "cross-env NODE_OPTIONS=--max_old_space_size=8192 react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint ./src --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "css-loader": "^7.1.2",
+    "eslint": "^8.53.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "gh-pages": "^6.1.1",
+    "nodemon": "^3.1.4",
+    "prettier": "3.2.5",
+    "style-loader": "^4.0.0"
   },
   "eslintConfig": {
     "extends": [
@@ -98,23 +115,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "cross-env": "^7.0.3",
-    "css-loader": "^7.1.2",
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "gh-pages": "^6.1.1",
-    "nodemon": "^3.1.4",
-    "prettier": "3.2.5",
-    "style-loader": "^4.0.0"
-  },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

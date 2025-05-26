@@ -66,7 +66,13 @@ export const AuthProvider = ({ children }) => {
   const clearAuthStorage = useCallback(() => {
     Cookies.remove("token");
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     delete axios.defaults.headers.common["Authorization"];
+  }, []);
+
+  // New: Store user data in localStorage
+  const persistUserData = useCallback((user) => {
+    localStorage.setItem("user", JSON.stringify(user));
   }, []);
 
   const checkAuth = useCallback(async () => {
@@ -94,7 +100,10 @@ export const AuthProvider = ({ children }) => {
         throw new Error("Invalid server response");
       }
 
-      // Update token expiration in storage
+      // Store user data in localStorage
+      persistUserData(userData);
+
+      // Update token storage
       Cookies.set("token", token, {
         expires: 7,
         secure: process.env.NODE_ENV === "production",
@@ -105,13 +114,15 @@ export const AuthProvider = ({ children }) => {
       dispatch({ type: "USER_LOADED", payload: userData });
     } catch (error) {
       console.error("Auth check failed:", error.message);
-      clearAuthStorage();
+      // Don't clear storage immediately on error
       dispatch({
         type: "AUTH_ERROR",
         payload: error.response?.data?.message || error.message,
       });
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
     }
-  }, [setAuthHeaders, clearAuthStorage]);
+  }, [setAuthHeaders, persistUserData]);
 
   const handleLogout = useCallback(() => {
     clearAuthStorage();
@@ -121,7 +132,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initializeAuth = async () => {
       const token = getToken();
-      if (token) setAuthHeaders(token);
+      const storedUser = localStorage.getItem("user");
+
+      // First: Try to hydrate from localStorage
+      if (token && storedUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          setAuthHeaders(token);
+          dispatch({ type: "LOGIN_SUCCESS", payload: user });
+        } catch (error) {
+          console.error("Error parsing stored user:", error);
+        }
+      }
+
+      // Then: Validate with server
       await checkAuth();
     };
 
