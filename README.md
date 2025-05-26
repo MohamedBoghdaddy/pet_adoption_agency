@@ -1,6 +1,4 @@
----
 
-````markdown
 # 🐾 Pet Adoption Agency
 
 A full-featured web application designed to streamline the pet adoption process by connecting potential adopters with shelters. The platform allows users to browse adoptable pets, submit applications, and manage adoptions while providing shelters with a dashboard to track and respond to requests.
