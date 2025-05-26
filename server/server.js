@@ -92,7 +92,7 @@ app.use(
   cors({
     origin: function (origin, callback) {
       const allowedOrigins = [
-        "https://hedj.netlify.app", // ✅ Deployed frontend
+        "https://petadoptionagency.netlify.app/", // ✅ Deployed frontend
         "http://localhost:3000", // ✅ Local frontend for development
       ];
 
