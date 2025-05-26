@@ -12,7 +12,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// ✅ Import Routes
+// ✅ Routes
 import employeeRoutes from "./routes/employeeroutes.js";
 import petRoutes from "./routes/petRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -27,7 +27,6 @@ const __dirname = path.dirname(__filename);
 // ✅ Load Environment Variables
 dotenv.config();
 
-// ✅ Extract Environment Variables
 const {
   PORT = 8000,
   MONGO_URL,
@@ -37,20 +36,16 @@ const {
   NODE_ENV = "development",
 } = process.env;
 
-// ✅ Validate Required Environment Variables
 if (!MONGO_URL || !JWT_SECRET || !SESSION_SECRET || !CORS_ORIGIN) {
   console.error("❌ Missing critical environment variables in .env");
   process.exit(1);
 }
 
-// ✅ Define Production Mode
 const isProduction = NODE_ENV === "production";
-
-// ✅ Setup Express App
 const app = express();
 const upload = multer({ dest: "uploads/" });
 
-// ✅ Setup MongoDB Session Store
+// ✅ MongoDB Session Store
 const MongoDBStore = connectMongoDBSession(session);
 const store = new MongoDBStore({
   uri: MONGO_URL,
@@ -61,53 +56,43 @@ store.on("error", (error) => {
   console.error("❌ Session store error:", error);
 });
 
-// ✅ Allowed Origins for CORS
-const allowedOrigins = [CORS_ORIGIN, "http://localhost:3000"];
-
-// 🔒 Security Middleware
-app.use(helmet()); // Secure headers
-app.use(morgan(isProduction ? "tiny" : "dev")); // Log requests
+// ✅ Middleware
+app.use(helmet());
+app.use(morgan(isProduction ? "tiny" : "dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// 🔗 CORS Configuration
+// ✅ CORS Setup (Fixed)
+const allowedOrigins = [
+  CORS_ORIGIN, // from .env → https://petadoptionagency.netlify.app
+  "http://localhost:3000",
+];
+
 app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("❌ CORS Policy Violation: Request Blocked"));
+        callback(new Error("❌ CORS Policy Violation: Not Allowed"));
       }
     },
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
+    credentials: true, // ✅ allow cookies across origin
   })
 );
 
-// 🛠️ Session Configuration
-// 🔗 CORS Configuration (Allow Multiple Origins)
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      const allowedOrigins = [
-        "https://petadoptionagency.netlify.app/", // ✅ Deployed frontend
-        "http://localhost:3000", // ✅ Local frontend for development
-      ];
+// ✅ Optional: Add manual fallback headers
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true); // ✅ Allow request
-      } else {
-        callback(new Error("CORS Policy Violation: Not Allowed"));
-      }
-    },
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true, // ✅ Allows cookies (important for authentication)
-  })
-);
-
-// 🔑 JWT Token Creation Helper
+// ✅ JWT Token Helper
 const createToken = (_id, res) => {
   const token = jwt.sign({ _id }, JWT_SECRET, { expiresIn: "3d" });
   res.cookie("token", token, {
@@ -119,30 +104,26 @@ const createToken = (_id, res) => {
   return token;
 };
 
-// 🚀 Connect to MongoDB
+// ✅ Connect MongoDB and Start Server
 const connectDB = async () => {
   try {
     await mongoose.connect(MONGO_URL);
     console.log("✅ Connected to MongoDB");
 
-    // 🌍 Start Server After DB Connection
     app.listen(PORT, () =>
       console.log(
-        `🚀 Server running on ${
-          isProduction ? "Render" : "localhost"
-        } at port ${PORT}`
+        `🚀 Server running on ${isProduction ? "Render" : "localhost"}:${PORT}`
       )
     );
   } catch (error) {
-    console.error("❌ Database connection error:", error);
+    console.error("❌ DB connection error:", error);
     process.exit(1);
   }
 };
 
-// ✅ Call function to connect to DB
 connectDB();
 
-// 📌 API Routes (Versioned)
+// ✅ API Routes
 app.use("/api/employees", employeeRoutes);
 app.use("/api/pets", petRoutes);
 app.use("/api/users", userRoutes);
@@ -150,22 +131,18 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/adoption", adoptionRoutes);
 
-// 📂 Serve Static Files (Uploads)
+// ✅ Serve Uploaded Files
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// ✅ Health Check Route
+// ✅ Root Health Check
 app.get("/", (req, res) => {
   res.json({
-    message: `petAdoptionAgency API is running on ${
-      isProduction ? "Render" : "localhost"
-    } 🚀`,
+    message: `API running on ${isProduction ? "Render" : "localhost"} 🚀`,
   });
 });
 
-// 🛠️ Error Handling Middleware
+// ✅ Global Error Handler
 app.use((err, req, res, next) => {
-  console.error("⚠️ Error:", err.message);
-  res
-    .status(500)
-    .json({ message: "Internal Server Error", error: err.message });
+  console.error("❌ Error:", err.message);
+  res.status(500).json({ message: "Server Error", error: err.message });
 });
