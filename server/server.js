@@ -19,7 +19,6 @@ import userRoutes from "./routes/userRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
 import adoptionRoutes from "./routes/adoptionRoutes.js";
-import repo
 
 // ✅ Convert __dirname for ES Module
 const __filename = fileURLToPath(import.meta.url);
