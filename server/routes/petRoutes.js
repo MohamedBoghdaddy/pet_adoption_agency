@@ -9,7 +9,7 @@ import {
   deletePet,
   uploadPetImage,
   validatePet,
-} from "../controller/petController.js";
+} from "../controller/petcontroller.js";
 
 import {
   isAuthenticated,
