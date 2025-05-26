@@ -5,16 +5,29 @@ import {
   getAllAdoptionRequests,
   updateAdoptionStatus,
   getApprovedRequests,
+  getUserAdoptionRequest,
 } from "../controller/adoptionController.js";
 import { generatePDF } from "../utils/pdfGenerator.js"; // Import your PDF generator
+import { isAuthenticated, verifyAdmin } from "../middleware/AuthMiddleware.js";
 
 const router = express.Router();
 
 // Adoption Request Routes
-router.post("/requests/create", createAdoptionRequest);
-router.get("/requests/all", getAllAdoptionRequests);
-router.patch("/requests/update/:id", updateAdoptionStatus);
+router.post("/requests/create", isAuthenticated, createAdoptionRequest);
+router.get(
+  "/requests/all",
+  isAuthenticated,
+  verifyAdmin,
+  getAllAdoptionRequests
+);
+router.patch(
+  "/requests/update/:id",
+  isAuthenticated,
+  verifyAdmin,
+  updateAdoptionStatus
+);
 router.get("/requests/approved", getApprovedRequests);
+router.get("/requests/user/:userId", isAuthenticated, getUserAdoptionRequest);
 
 // Adoption Report Routes
 router.get("/reports", async (req, res) => {

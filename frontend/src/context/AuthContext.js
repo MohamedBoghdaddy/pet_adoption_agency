@@ -43,7 +43,7 @@ const authReducer = (state, action) => {
         user: null,
         isAuthenticated: false,
         loading: false,
-        error: action.payload,
+        error: action.payload || null,
       };
     case "SET_LOADING":
       return { ...state, loading: action.payload };
@@ -53,14 +53,20 @@ const authReducer = (state, action) => {
 };
 
 const getToken = () => {
-  return Cookies.get("token") || localStorage.getItem("token");
+  return (
+    Cookies.get("token") ||
+    localStorage.getItem("token") ||
+    JSON.parse(localStorage.getItem("user") || "null")?.token
+  );
 };
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const setAuthHeaders = useCallback((token) => {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
   }, []);
 
   const clearAuthStorage = useCallback(() => {
@@ -70,9 +76,15 @@ export const AuthProvider = ({ children }) => {
     delete axios.defaults.headers.common["Authorization"];
   }, []);
 
-  // New: Store user data in localStorage
-  const persistUserData = useCallback((user) => {
-    localStorage.setItem("user", JSON.stringify(user));
+  const persistUserData = useCallback((user, token) => {
+    if (user && token) {
+      localStorage.setItem("user", JSON.stringify({ user, token }));
+      Cookies.set("token", token, {
+        expires: 7,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
+    }
   }, []);
 
   const checkAuth = useCallback(async () => {
@@ -80,13 +92,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const token = getToken();
-      if (!token) {
-        dispatch({
-          type: "AUTH_ERROR",
-          payload: "No authentication token found",
-        });
-        return;
-      }
+      if (!token) throw new Error("No token found");
 
       setAuthHeaders(token);
 
@@ -96,61 +102,55 @@ export const AuthProvider = ({ children }) => {
       });
 
       const userData = response.data?.user;
-      if (!userData) {
-        throw new Error("Invalid server response");
-      }
+      if (!userData) throw new Error("Invalid user data");
 
-      // Store user data in localStorage
-      persistUserData(userData);
-
-      // Update token storage
-      Cookies.set("token", token, {
-        expires: 7,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-      });
-      localStorage.setItem("token", token);
-
+      persistUserData(userData, token);
       dispatch({ type: "USER_LOADED", payload: userData });
     } catch (error) {
-      console.error("Auth check failed:", error.message);
-      // Don't clear storage immediately on error
-      dispatch({
-        type: "AUTH_ERROR",
-        payload: error.response?.data?.message || error.message,
-      });
+      console.error("❌ Auth check failed:", error.message);
+      // Do NOT clear storage unless the error indicates token is invalid/expired
+      if (error.response?.status === 401 || error.message.includes("token")) {
+        dispatch({
+          type: "AUTH_ERROR",
+          payload:
+            error.response?.data?.message ||
+            error.message ||
+            "Authentication failed",
+        });
+      }
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
   }, [setAuthHeaders, persistUserData]);
 
-  const handleLogout = useCallback(() => {
-    clearAuthStorage();
-    dispatch({ type: "LOGOUT_SUCCESS", payload: null });
-  }, [clearAuthStorage]);
-
   useEffect(() => {
-    const initializeAuth = async () => {
-      const token = getToken();
+    const initializeAuth = () => {
       const storedUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
 
-      // First: Try to hydrate from localStorage
-      if (token && storedUser) {
+      if (storedUser && token) {
         try {
-          const user = JSON.parse(storedUser);
+          const parsedUser = JSON.parse(storedUser);
           setAuthHeaders(token);
-          dispatch({ type: "LOGIN_SUCCESS", payload: user });
-        } catch (error) {
-          console.error("Error parsing stored user:", error);
+          dispatch({
+            type: "LOGIN_SUCCESS",
+            payload: parsedUser.user || parsedUser,
+          });
+        } catch (err) {
+          console.error("Error parsing stored user:", err);
         }
       }
 
-      // Then: Validate with server
-      await checkAuth();
+      checkAuth();
     };
 
     initializeAuth();
   }, [checkAuth, setAuthHeaders]);
+  
+  const handleLogout = useCallback(() => {
+    clearAuthStorage();
+    dispatch({ type: "LOGOUT_SUCCESS" });
+  }, [clearAuthStorage]);
 
   const contextValue = useMemo(
     () => ({
@@ -158,8 +158,9 @@ export const AuthProvider = ({ children }) => {
       dispatch,
       logout: handleLogout,
       checkAuth,
+      setAuthHeaders,
     }),
-    [state, handleLogout, checkAuth]
+    [state, handleLogout, checkAuth, setAuthHeaders]
   );
 
   return (

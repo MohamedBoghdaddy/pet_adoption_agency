@@ -1,0 +1,97 @@
+/* MyApplication.css */
+
+:root {
+    --oyster-pink: #e8cec7;
+    --tundora: #404040;
+    --petite-orchid: #da9a96;
+    --white: #ffffff;
+    --silver: #cac9c9;
+    --success: #4caf50;
+    --pending: #fbc02d;
+    --rejected: #f44336;
+  }
+  
+  /* ✅ General Page Style */
+  .my-application-page {
+    background: var(--oyster-pink);
+    padding: 60px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    max-width: 950px;
+    margin: 40px auto;
+    text-align: center;
+  }
+  
+  /* ✅ Heading */
+  .my-application-page h2 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--tundora);
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  /* ✅ Table */
+  .my-application-table {
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .my-application-table td {
+    padding: 14px 18px;
+    font-size: 1.1rem;
+    color: var(--tundora);
+    vertical-align: middle;
+  }
+  
+  .my-application-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* ✅ Status Badge Colors */
+  .status-approved {
+    color: var(--success);
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  
+  .status-pending {
+    color: var(--pending);
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  
+  .status-rejected {
+    color: var(--rejected);
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  
+  /* ✅ Spinner Wrapper */
+  .spinner-wrapper {
+    text-align: center;
+    padding: 100px 0;
+  }
+  
+  /* ✅ Responsive */
+  @media screen and (max-width: 768px) {
+    .my-application-page {
+      padding: 30px 20px;
+      margin: 30px 10px;
+    }
+  
+    .my-application-page h2 {
+      font-size: 1.8rem;
+    }
+  
+    .my-application-table td {
+      font-size: 1rem;
+      padding: 12px;
+    }
+  }
+  

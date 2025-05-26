@@ -2,21 +2,22 @@ import { useState } from "react";
 import axios from "axios";
 import "../../styles/signup.css";
 import { Link, useNavigate } from "react-router-dom";
-import {  Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 const Signup = () => {
   const [formData, setFormData] = useState({
     username: "",
-    name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    gender: "",
     firstName: "",
+    middleName: "",
     lastName: "",
+    gender: "",
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [message, setMessage] = useState({ error: "", success: "" });
@@ -30,21 +31,25 @@ const Signup = () => {
     e.preventDefault();
     setMessage({ error: "", success: "" });
 
-    if (!formData.name) return setMessage({ error: "Name is required." });
+    // Validation
+    if (!formData.username)
+      return setMessage({ error: "Username is required." });
+    if (!formData.firstName || !formData.lastName)
+      return setMessage({ error: "First and last name are required." });
+    if (!formData.gender) return setMessage({ error: "Gender is required." });
     if (!validateEmail(formData.email))
       return setMessage({ error: "Invalid email address." });
     if (formData.password.length < 6)
       return setMessage({ error: "Password must be at least 6 characters." });
     if (formData.password !== formData.confirmPassword)
       return setMessage({ error: "Passwords do not match." });
-    if (!formData.gender) return setMessage({ error: "Gender is required." });
 
     try {
-      await axios.post("http://localhost:8000/api/users/Signup", formData);
-      setMessage({ success: "Registration successful" });
+      await axios.post("http://localhost:8000/api/users/signup", formData); // case-sensitive "signup"
+      setMessage({ success: "Registration successful!" });
       navigate("/login");
     } catch (error) {
-      setMessage({ error: error.response?.data?.message || "Signup failed" });
+      setMessage({ error: error.response?.data?.message || "Signup failed." });
     }
   };
 
@@ -54,28 +59,27 @@ const Signup = () => {
         <div className="left-sign">
           <h2>Signup</h2>
           <form onSubmit={handleSignup}>
+            {/* Basic Text Fields */}
             {[
-              "username",
-              "name",
-              "email",
-              "firstName",
-              "lastName",
-            ].map((field) => (
-              <div className="field" key={field}>
-                <label htmlFor={field}>
-                  {field.charAt(0).toUpperCase() + field.slice(1)}:
-                </label>
+              { name: "username", label: "Username" },
+              { name: "email", label: "Email", type: "email" },
+              { name: "firstName", label: "First Name" },
+              { name: "middleName", label: "Middle Name" },
+              { name: "lastName", label: "Last Name" },
+            ].map(({ name, label, type }) => (
+              <div className="field" key={name}>
+                <label htmlFor={name}>{label}:</label>
                 <input
-                  type="text"
-                  id={field}
-                  name={field}
-                  value={formData[field]}
+                  type={type || "text"}
+                  id={name}
+                  name={name}
+                  value={formData[name]}
                   onChange={handleChange}
-                  maxLength={field === "email" ? 70 : 20}
                 />
               </div>
             ))}
 
+            {/* Password Fields */}
             {["password", "confirmPassword"].map((field, index) => (
               <div className="field password-container" key={field}>
                 <label htmlFor={field}>
@@ -116,14 +120,15 @@ const Signup = () => {
               </div>
             ))}
 
+            {/* Gender Selection */}
             <div className="field">
               <label htmlFor="gender">Gender:</label>
               <div className="gender-container">
-                {["male", "female"].map((g) => (
+                {["male", "female", "other"].map((g) => (
                   <div key={g}>
                     <input
                       type="radio"
-                      id={g} // Explicitly associate label with input
+                      id={g}
                       name="gender"
                       value={g}
                       checked={formData.gender === g}
@@ -137,6 +142,7 @@ const Signup = () => {
               </div>
             </div>
 
+            {/* Messages */}
             {message.error && <div className="error">{message.error}</div>}
             {message.success && (
               <div className="success">{message.success}</div>

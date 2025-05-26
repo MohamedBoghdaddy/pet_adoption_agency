@@ -19,7 +19,8 @@ import Others from "./pages/pets/Others";
 import Adoption from "./pages/adopt/Adoption";
 import HowTo from "./pages/Home/HowTo";
 import AddPet from "./pages/dashboard/AddPet";
-
+import MyApplication from "./pages/dashboard/MyApplication";
+import Pets from "./pages/dashboard/Pets";
 function App() {
   return (
     <Router>
@@ -137,12 +138,33 @@ function App() {
           }
         />
         <Route
+          path="/pets"
+          element={
+            <>
+              <NavBar />
+              <Sidebar />
+              <Pets />
+              <Footer />
+            </>
+          }
+        />
+        <Route
           path="/Setting"
           element={
             <>
               <NavBar />
               <Sidebar />
               <Setting />
+              <Footer />
+            </>
+          }
+        />
+        <Route
+          path="/MyApplication"
+          element={
+            <>
+              <NavBar />
+              <MyApplication />
               <Footer />
             </>
           }

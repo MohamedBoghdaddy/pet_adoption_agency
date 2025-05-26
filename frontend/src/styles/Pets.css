@@ -1,0 +1,52 @@
+/* Pets.css */
+
+.analytic-container {
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .analytic-container h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .pet-card .card {
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .pet-card .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .pet-card .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #444;
+  }
+  
+  .pet-card .card-text {
+    color: #555;
+    font-size: 1rem;
+  }
+  
+  .pet-card .text-muted {
+    font-size: 0.9rem;
+    color: #777;
+  }
+  
+  .image-preview {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .image-preview img {
+    max-height: 250px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+  

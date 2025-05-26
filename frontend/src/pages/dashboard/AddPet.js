@@ -1,14 +1,22 @@
 import { useState } from "react";
 import { Container, Form, Button, Image } from "react-bootstrap";
+import axios from "axios";
+import { toast } from "react-toastify";
 import "../../styles/AddPet.css";
+
+const API_URL =
+  process.env.REACT_APP_API_URL ??
+  (window.location.hostname === "localhost"
+    ? "http://localhost:8000"
+    : "https://pet-adoption-agency.onrender.com");
 
 const AddPet = () => {
   const [petName, setPetName] = useState("");
   const [description, setDescription] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // Handle image selection and preview
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -17,24 +25,45 @@ const AddPet = () => {
     }
   };
 
-  // Submit handler (replace with your API call)
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!petName || !description || !imageFile) {
-      alert("Please fill all fields and select an image.");
+      toast.error("Please fill all fields and select an image.");
       return;
     }
 
-    // Create form data to send image & info to backend
     const formData = new FormData();
     formData.append("petName", petName);
     formData.append("description", description);
-    formData.append("image", imageFile);
+    formData.append("photo", imageFile); // Ensure backend expects "photo"
 
-    // Example: Replace with axios POST to your backend endpoint
-    // axios.post("/api/pets/create", formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+    setLoading(true);
 
-    alert("Pet added! (Implement backend upload)");
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/pet/create`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      toast.success("✅ Pet added successfully!");
+
+      // Reset form
+      setPetName("");
+      setDescription("");
+      setImageFile(null);
+      setPreviewUrl(null);
+    } catch (err) {
+      console.error("Add pet error:", err);
+      toast.error("❌ Failed to add pet. Check console.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -80,8 +109,13 @@ const AddPet = () => {
           </div>
         )}
 
-        <Button variant="primary" type="submit" className="mt-4">
-          Add Pet
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-4"
+          disabled={loading}
+        >
+          {loading ? "Adding..." : "Add Pet"}
         </Button>
       </Form>
     </Container>

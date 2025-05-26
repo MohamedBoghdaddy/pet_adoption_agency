@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Navbar,
   Nav,
@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faSignOutAlt, faPaw } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import logo from "../../Assets/Images/pet-logo.png";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -26,6 +26,7 @@ const NavBar = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
 
   const { state } = useAuthContext();
   const { user, isAuthenticated } = state;
@@ -47,6 +48,10 @@ const NavBar = () => {
       navigate(`/workspaces?term=${searchTerm}`);
     }
   };
+  // Close mobile menu on route change
+  useEffect(() => {
+    setExpanded(false);
+  }, [location.pathname]);
 
   return (
     <Navbar
@@ -112,7 +117,7 @@ const NavBar = () => {
               WHO WE ARE
             </ScrollLink>
 
-            {isAuthenticated && (
+            {isAuthenticated && user && (
               <Nav.Link
                 as={Link}
                 to="/dashboard"
@@ -123,19 +128,21 @@ const NavBar = () => {
               </Nav.Link>
             )}
 
-            <ScrollLink
-              to="contact"
-              smooth
-              className="nav-link"
-              onClick={handleNavCollapse}
+            <Nav.Link
+              as={Link}
+              to="/contact"
+              className={`nav-link ${
+                location.pathname === "/contact" ? "active" : ""
+              }`}
+              onClick={() => setExpanded(false)}
             >
-              Contact Us
-            </ScrollLink>
+              Contact
+            </Nav.Link>
 
-            {isAuthenticated && (
+            {isAuthenticated && user?.role === "user" && (
               <Nav.Link
                 as={Link}
-                to="/my-applications"
+                to="/MyApplication"
                 className="nav-link"
                 onClick={handleNavCollapse}
               >
@@ -162,34 +169,35 @@ const NavBar = () => {
               </Row>
             </Form>
 
-            {/* Enhanced Auth Section */}
-            {isAuthenticated ? (
-              <div
-                className="nav-link"
+            {/* Auth Buttons */}
+            {isAuthenticated && user ? (
+              <Nav.Link
                 role="button"
-                tabIndex="0"
+                tabIndex={0}
                 onClick={handleLogout}
-                onKeyDown={(e) =>
-                  (e.key === "Enter" || e.key === " ") && handleLogout()
-                }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") handleLogout();
+                }}
+                className="nav-link logout-link"
               >
                 <FontAwesomeIcon icon={faSignOutAlt} /> Logout
-              </div>
+              </Nav.Link>
             ) : (
-              <div
-                className="nav-link"
+              <Nav.Link
                 role="button"
-                tabIndex="0"
+                tabIndex={0}
                 onClick={() => {
                   handleLoginModalOpen();
-                  handleNavCollapse();
+                  setExpanded(false);
                 }}
-                onKeyDown={(e) =>
-                  (e.key === "Enter" || e.key === " ") && handleLoginModalOpen()
-                }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ")
+                    handleLoginModalOpen();
+                }}
+                className="nav-link login-link"
               >
                 <FontAwesomeIcon icon={faUser} /> Login
-              </div>
+              </Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>

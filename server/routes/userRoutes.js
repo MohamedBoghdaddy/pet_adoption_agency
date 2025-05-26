@@ -29,7 +29,9 @@ router.post("/logout", logoutUser); // 🔹 Logout user
  * ✅ USER MANAGEMENT ROUTES (Requires Authentication)
  */
 router.get("/", isAuthenticated, verifyAdmin, getAllUsers); // 🔹 Get all users (Admin)
-router.get("/:userId", isAuthenticated, verifyAdmin, getUser); // 🔹 Get user by ID
+router.get("/:userId", isAuthenticated, getUser); // 🔹 Get user by ID
+router.put("/:userId", isAuthenticated, updateUser); // 🔹 PUT route
+
 router.put(
   "/:userId",
   isAuthenticated,
@@ -44,5 +46,12 @@ router.get("/filter", isAuthenticated, verifyAdmin, getUsersByRole);
  */
 router.get("/search", isAuthenticated, adminMiddleware, searchUsers); // 🔹 Admin user search
 router.post("/create-admin", isAuthenticated, verifyAdmin, createAdmin); // 🔹 Admin creation
+
+
+// Add this to validate token and return user info
+router.get("/checkAuth", isAuthenticated, (req, res) => {
+  res.status(200).json({ user: req.user });
+});
+
 
 export default router;

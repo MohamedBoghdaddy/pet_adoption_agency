@@ -14,7 +14,7 @@ import { fileURLToPath } from "url";
 
 // ✅ Import Routes
 import employeeRoutes from "./routes/employeeroutes.js";
-import productRoutes from "./routes/productsRoutes.js";
+import petRoutes from "./routes/petRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
@@ -144,11 +144,11 @@ connectDB();
 
 // 📌 API Routes (Versioned)
 app.use("/api/employees", employeeRoutes);
-app.use("/api/products", productRoutes);
+app.use("/api/pets", petRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/settings", settingsRoutes);
-app.use("/api/settings", adoptionRoutes);
+app.use("/api/adoption", adoptionRoutes);
 
 // 📂 Serve Static Files (Uploads)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

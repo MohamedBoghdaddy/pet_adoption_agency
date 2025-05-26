@@ -1,4 +1,4 @@
-// Sidebar.js (updated for pet adoption)
+// src/components/Sidebar.js
 import React, { useState, useEffect, useRef } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { Link } from "react-router-dom";
@@ -179,36 +179,56 @@ const Sidebar = () => {
             <FaPaw /> Dashboard
           </Link>
         </li>
-        <li>
-          <Link to="/reports">
-            <FaChartLine /> Adoption Reports
-          </Link>
-        </li>
-        {/* <li>
-          <Link to="/customers">
-            <BsPersonCircle /> Adopters
-          </Link>
-        </li> */}
-        <li>
-          <Link to="/employees">
-            <FaUsers /> Staff
-          </Link>
-        </li>
-        <li>
-          <Link to="/addpet">
-            <FaPaw /> Add Pet
-          </Link>
-        </li>
-        {/* <li>
-          <Link to="/profile">
-            <FaUsers /> Profile
-          </Link>
-        </li> */}
-        <li>
-          <Link to="/Setting">
-            <FaTools /> Settings
-          </Link>
-        </li>
+
+        {isAuthenticated && user?.role === "admin" && (
+          <>
+            <li>
+              <Link to="/reports">
+                <FaChartLine /> Adoption Reports
+              </Link>
+            </li>
+            <li>
+              <Link to="/employees">
+                <FaUsers /> Staff
+              </Link>
+            </li>
+            <li>
+              <Link to="/addpet">
+                <FaPaw /> Add Pet
+              </Link>
+            </li>
+            <li>
+              <Link to="/setting">
+                <FaTools /> Settings
+              </Link>
+            </li>
+            <li>
+              <Link to="/pets">
+                <FaPaw /> pets
+              </Link>
+            </li>
+          </>
+        )}
+
+        {isAuthenticated && user?.role === "user" && (
+          <>
+            <li>
+              <Link to="/profile">
+                <BsPersonCircle /> Profile
+              </Link>
+            </li>
+            <li>
+              <Link to="/Adoption">
+                <FaPaw /> Adoption
+              </Link>
+            </li>
+            <li>
+              <Link to="/myapplication">
+                <FaPaw /> My Application
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
     </div>
   );

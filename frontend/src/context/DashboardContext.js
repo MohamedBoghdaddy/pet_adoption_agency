@@ -18,7 +18,10 @@ import {
   fetchReports,
   generateAdoptionReport,
   downloadReport,
+  fetchUserProfile,
+  fetchAdoptionAnalytics,
 } from "../services/dashboardServices";
+import { authHeader } from "../utils/authHeader";
 import axios from "axios";
 
 // API Base URL
@@ -28,7 +31,6 @@ const API_URL =
     ? "http://localhost:8000"
     : "https://pet-adoption-agency.onrender.com");
 
-// Create Context
 export const DashboardContext = createContext();
 
 // Initial State
@@ -49,11 +51,13 @@ const initialState = {
   },
 };
 
-// Reducer Function
+// Reducer
 const dashboardReducer = (state, action) => {
   switch (action.type) {
+    case "FETCH_START":
+      return { ...state, loading: true, error: null };
     case "FETCH_SUCCESS":
-      return { ...state, ...action.payload, loading: false, error: null };
+      return { ...state, ...action.payload, loading: false };
     case "FETCH_ERROR":
       return { ...state, loading: false, error: action.payload };
     case "UPDATE_PROFILE":
@@ -65,7 +69,7 @@ const dashboardReducer = (state, action) => {
   }
 };
 
-// Provider Component
+// Provider
 export const DashboardProvider = ({ children }) => {
   const { state: authState } = useAuthContext();
   const { user, isAuthenticated } = authState;
@@ -73,7 +77,9 @@ export const DashboardProvider = ({ children }) => {
 
   // Fetch Dashboard Data
   const fetchDashboardData = useCallback(async () => {
-    if (!isAuthenticated || !user) return;
+    if (!isAuthenticated || !user?._id) return;
+
+    dispatch({ type: "FETCH_START" });
 
     try {
       const [
@@ -88,14 +94,8 @@ export const DashboardProvider = ({ children }) => {
         fetchAdopters(),
         fetchAdoptionApplications(),
         fetchReports(),
-        user?._id
-          ? axios.get(`${API_URL}/api/users/${user._id}`, {
-              withCredentials: true,
-            })
-          : Promise.resolve({ status: "fulfilled", value: { data: null } }),
-        axios.get(`${API_URL}/api/adoption-analytics`, {
-          withCredentials: true,
-        }),
+        fetchUserProfile(user._id),
+        fetchAdoptionAnalytics(),
       ]);
 
       dispatch({
@@ -120,13 +120,24 @@ export const DashboardProvider = ({ children }) => {
     } catch (error) {
       dispatch({
         type: "FETCH_ERROR",
-        payload: error.response?.data?.message || "Failed to load dashboard",
+        payload: error?.response?.data?.message || "Failed to load dashboard",
       });
       toast.error("Failed to load dashboard data");
     }
   }, [isAuthenticated, user]);
 
-  // Pet Management Functions
+  // Profile Fetch
+  const fetchProfile = useCallback(async () => {
+    if (!user?._id) return;
+    try {
+      const response = await fetchUserProfile(user._id);
+      dispatch({ type: "UPDATE_PROFILE", payload: response.data });
+    } catch (error) {
+      toast.error("Failed to load profile.");
+    }
+  }, [user]);
+
+  // CRUD Pets
   const handleCreatePet = useCallback(
     async (petData) => {
       try {
@@ -166,14 +177,14 @@ export const DashboardProvider = ({ children }) => {
     [fetchDashboardData]
   );
 
-  // Adoption Application Functions
+  // Adoption Application Actions
   const handleApproveApplication = useCallback(
     async (applicationId) => {
       try {
         await axios.patch(
           `${API_URL}/api/adoption-applications/${applicationId}/approve`,
           {},
-          { withCredentials: true }
+          authHeader()
         );
         fetchDashboardData();
         toast.success("Application approved!");
@@ -190,10 +201,10 @@ export const DashboardProvider = ({ children }) => {
         await axios.patch(
           `${API_URL}/api/adoption-applications/${applicationId}/reject`,
           {},
-          { withCredentials: true }
+          authHeader()
         );
         fetchDashboardData();
-        toast.success("Application rejected");
+        toast.success("Application rejected!");
       } catch (error) {
         toast.error("Error rejecting application");
       }
@@ -201,7 +212,7 @@ export const DashboardProvider = ({ children }) => {
     [fetchDashboardData]
   );
 
-  // Report Functions
+  // Reports
   const handleGenerateReport = useCallback(
     async (reportData) => {
       try {
@@ -230,27 +241,12 @@ export const DashboardProvider = ({ children }) => {
     }
   }, []);
 
-  // Fetch Profile Data
-  const fetchProfile = useCallback(async () => {
-    if (!user?._id) return;
-
-    try {
-      const response = await axios.get(`${API_URL}/api/users/${user._id}`, {
-        withCredentials: true,
-      });
-      dispatch({ type: "UPDATE_PROFILE", payload: response.data });
-    } catch (error) {
-      toast.error("Failed to load profile.");
-    }
-  }, [user]);
-
-  // Initial Data Fetch
+  // Initial Fetch
   useEffect(() => {
     fetchDashboardData();
     fetchProfile();
   }, [fetchDashboardData, fetchProfile]);
 
-  // Context Value
   const contextValue = useMemo(
     () => ({
       state,

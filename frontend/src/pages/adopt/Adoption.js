@@ -2,8 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { Container, Form, Button, Alert, Spinner } from "react-bootstrap";
 import "../../styles/Adoption.css";
+import Cookies from "js-cookie";
 
-const Adoption = ({ user }) => {
+const Adoption = () => {
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -12,6 +13,7 @@ const Adoption = ({ user }) => {
     petPreference: "",
     reason: "",
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({
     success: null,
@@ -32,10 +34,9 @@ const Adoption = ({ user }) => {
     if (!form.address.trim()) newErrors.address = "Address is required";
     if (!form.petPreference)
       newErrors.petPreference = "Pet selection is required";
-    if (!form.reason.trim() || form.reason.length < 20) {
+    if (!form.reason.trim() || form.reason.length < 20)
       newErrors.reason =
         "Please provide a detailed reason (at least 20 characters)";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -44,7 +45,7 @@ const Adoption = ({ user }) => {
   const handleChange = (e) => {
     const { id, value } = e.target;
     setForm((prev) => ({ ...prev, [id]: value }));
-    // Clear error when user starts typing
+
     if (errors[id]) {
       setErrors((prev) => ({ ...prev, [id]: "" }));
     }
@@ -52,38 +53,44 @@ const Adoption = ({ user }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitStatus({ success: null, message: "" });
 
     if (!validateForm()) return;
-    if (!user?._id) {
+
+    const token = localStorage.getItem("token") || Cookies.get("token");
+    if (!token) {
       setSubmitStatus({
         success: false,
-        message: "You must be logged in to submit an adoption request",
+        message: "You must be logged in to submit an adoption request.",
       });
       return;
     }
 
     setIsSubmitting(true);
-    setSubmitStatus({ success: null, message: "" });
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/adoption/create",
+        "http://localhost:8000/api/adoption/requests/create",
         {
-          ...form,
-          userId: user._id,
+          petName: form.petPreference,
+          petType: form.petPreference.toLowerCase().includes("cat")
+            ? "cat"
+            : "dog",
+          reason: form.reason,
         },
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
+          withCredentials: true,
         }
       );
 
       if (response.status === 201) {
         setSubmitStatus({
           success: true,
-          message:
-            "Request submitted successfully! Our team will review your application shortly.",
+          message: "Request submitted successfully!",
         });
         setForm({
           fullName: "",
@@ -95,14 +102,10 @@ const Adoption = ({ user }) => {
         });
       }
     } catch (error) {
-      console.error("Adoption request error:", error);
+      console.error("❌ Adoption request error:", error);
       const errorMessage =
-        error.response?.data?.message ||
-        "Failed to submit request. Please try again later.";
-      setSubmitStatus({
-        success: false,
-        message: errorMessage,
-      });
+        error.response?.data?.message || "Failed to submit request. Try again.";
+      setSubmitStatus({ success: false, message: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
@@ -113,7 +116,7 @@ const Adoption = ({ user }) => {
       <h1 className="adoption-title">🐾 Adoption Application</h1>
       <p className="adoption-description">
         Please complete this form to begin the adoption process. We'll review
-        your application and contact you within 3-5 business days.
+        your application and contact you shortly.
       </p>
 
       {submitStatus.success !== null && (
@@ -130,7 +133,6 @@ const Adoption = ({ user }) => {
             type="text"
             value={form.fullName}
             onChange={handleChange}
-            placeholder="Enter your full name"
             isInvalid={!!errors.fullName}
             required
           />
@@ -146,7 +148,6 @@ const Adoption = ({ user }) => {
             type="email"
             value={form.email}
             onChange={handleChange}
-            placeholder="Enter your email"
             isInvalid={!!errors.email}
             required
           />
@@ -162,7 +163,6 @@ const Adoption = ({ user }) => {
             type="tel"
             value={form.phone}
             onChange={handleChange}
-            placeholder="Enter your phone number (e.g., 123-456-7890)"
             isInvalid={!!errors.phone}
             required
           />
@@ -173,13 +173,12 @@ const Adoption = ({ user }) => {
 
         {/* Address */}
         <Form.Group controlId="address" className="mb-3">
-          <Form.Label>Full Address</Form.Label>
+          <Form.Label>Address</Form.Label>
           <Form.Control
             as="textarea"
-            rows={3}
+            rows={2}
             value={form.address}
             onChange={handleChange}
-            placeholder="Enter your full address including city and zip code"
             isInvalid={!!errors.address}
             required
           />
@@ -199,61 +198,38 @@ const Adoption = ({ user }) => {
             required
           >
             <option value="">Select a pet</option>
-            <option value="Buddy (Dog)">
-              Buddy (Dog) - Golden Retriever, 2 years
-            </option>
-            <option value="Daisy (Dog)">Daisy (Dog) - Beagle, 1.5 years</option>
-            <option value="Max (Dog)">Max (Dog) - Labrador, 3 years</option>
-            <option value="Whiskers (Cat)">
-              Whiskers (Cat) - Tabby, 4 years
-            </option>
-            <option value="Any available pet">
-              I'm open to any available pet
-            </option>
+            <option value="Buddy (Dog)">Buddy (Dog)</option>
+            <option value="Daisy (Dog)">Daisy (Dog)</option>
+            <option value="Max (Dog)">Max (Dog)</option>
+            <option value="Whiskers (Cat)">Whiskers (Cat)</option>
+            <option value="Any available pet">Any available pet</option>
           </Form.Control>
           <Form.Control.Feedback type="invalid">
             {errors.petPreference}
           </Form.Control.Feedback>
         </Form.Group>
 
-        {/* Reason for Adoption */}
+        {/* Reason */}
         <Form.Group controlId="reason" className="mb-4">
-          <Form.Label>Tell us about why you want to adopt</Form.Label>
+          <Form.Label>Why do you want to adopt?</Form.Label>
           <Form.Control
             as="textarea"
             rows={4}
             value={form.reason}
             onChange={handleChange}
-            placeholder="Please share your reasons for adoption, your experience with pets, and your home environment"
             isInvalid={!!errors.reason}
             required
           />
           <Form.Control.Feedback type="invalid">
             {errors.reason}
           </Form.Control.Feedback>
-          <Form.Text muted>
-            Minimum 20 characters. The more details you provide, the better we
-            can match you with a pet.
-          </Form.Text>
         </Form.Group>
 
-        {/* Submit Button */}
-        <Button
-          type="submit"
-          variant="primary"
-          className="submit-btn"
-          disabled={isSubmitting}
-        >
+        {/* Submit */}
+        <Button type="submit" variant="primary" disabled={isSubmitting}>
           {isSubmitting ? (
             <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-                className="me-2"
-              />
+              <Spinner animation="border" size="sm" className="me-2" />
               Submitting...
             </>
           ) : (

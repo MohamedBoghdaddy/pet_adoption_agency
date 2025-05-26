@@ -16,7 +16,7 @@ import {
   addToWishlist,
   removeFromWishlist,
   checkout,
-} from "../services/productServices"; // ✅ Import Product Services
+} from "../services/petServices"; // ✅ Import Product Services
 
 export const ShopContext = createContext(null);
 
