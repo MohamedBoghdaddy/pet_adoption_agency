@@ -40,16 +40,12 @@ const AddPet = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        `${API_URL}/api/pet/create`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      await axios.post(`${API_URL}/api/pet/create`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
       toast.success("✅ Pet added successfully!");
 
