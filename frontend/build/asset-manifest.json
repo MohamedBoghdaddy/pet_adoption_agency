@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.9f8b4c54.css",
-    "main.js": "/static/js/main.8b61c800.js",
+    "main.js": "/static/js/main.faa68f37.js",
     "static/media/pet-logo.png": "/static/media/pet-logo.8d9da61042db9b4f65e5.png",
     "static/media/reptile1.jpg": "/static/media/reptile1.17547e0a5ef48993688f.jpg",
     "static/media/kane.jpg": "/static/media/kane.a36c8cda4ad2c38e6983.jpg",
@@ -24,10 +24,10 @@
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
     "main.9f8b4c54.css.map": "/static/css/main.9f8b4c54.css.map",
-    "main.8b61c800.js.map": "/static/js/main.8b61c800.js.map"
+    "main.faa68f37.js.map": "/static/js/main.faa68f37.js.map"
   },
   "entrypoints": [
     "static/css/main.9f8b4c54.css",
-    "static/js/main.8b61c800.js"
+    "static/js/main.faa68f37.js"
   ]
 }
