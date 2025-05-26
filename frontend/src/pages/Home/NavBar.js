@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Navbar, Nav, Container, NavDropdown, Modal } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Container,
+  NavDropdown,
+  Modal,
+  Form,
+  Row,
+  Col,
+  Button,
+} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faSignOutAlt, faPaw } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,17 +25,27 @@ const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const { user, isAuthenticated } = useAuthContext();
+  const { state } = useAuthContext();
+  const { user, isAuthenticated } = state;
   const navigate = useNavigate();
   const { logout } = useLogout();
 
   const handleLoginModalOpen = () => setShowLoginModal(true);
   const handleLoginModalClose = () => setShowLoginModal(false);
   const handleNavCollapse = () => setExpanded(!expanded);
+
   const handleLogout = async () => {
     logout();
     navigate("/");
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm) {
+      navigate(`/workspaces?term=${searchTerm}`);
+    }
   };
 
   return (
@@ -36,12 +56,10 @@ const NavBar = () => {
       expanded={expanded}
     >
       <Container fluid>
-        {/* ✅ Brand Logo */}
         <Navbar.Brand as={Link} to="/" className="navbar-brand">
           <img src={logo} alt="Company Logo" className="nav-logo" />
         </Navbar.Brand>
 
-        {/* ✅ Toggler */}
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
           className="navbar-toggler"
@@ -59,10 +77,9 @@ const NavBar = () => {
               Home
             </Nav.Link>
 
-            {/* ✅ Dropdown for Pet Categories */}
             <NavDropdown
               title="Pets"
-              id="basic-nav-dropdown"
+              id="pets-dropdown"
               show={showDropdown}
               onMouseEnter={() => setShowDropdown(true)}
               onMouseLeave={() => setShowDropdown(false)}
@@ -86,30 +103,34 @@ const NavBar = () => {
               ))}
             </NavDropdown>
 
-            <Nav.Link
-              as={ScrollLink}
-              to="/WhoWeAre"
+            <ScrollLink
+              to="WhoWeAre"
+              smooth
               className="nav-link"
               onClick={handleNavCollapse}
             >
               WHO WE ARE
-            </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/dashboard"
-              className="nav-link"
-              onClick={handleNavCollapse}
-            >
-              Dashboard
-            </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/contact"
+            </ScrollLink>
+
+            {isAuthenticated && (
+              <Nav.Link
+                as={Link}
+                to="/dashboard"
+                className="nav-link"
+                onClick={handleNavCollapse}
+              >
+                Dashboard
+              </Nav.Link>
+            )}
+
+            <ScrollLink
+              to="contact"
+              smooth
               className="nav-link"
               onClick={handleNavCollapse}
             >
               Contact Us
-            </Nav.Link>
+            </ScrollLink>
 
             {isAuthenticated && (
               <Nav.Link
@@ -122,25 +143,62 @@ const NavBar = () => {
               </Nav.Link>
             )}
 
-            {/* ✅ Auth Section */}
-            {isAuthenticated && user ? (
-              <Nav.Link className="nav-link" onClick={handleLogout}>
+            {/* Search Form */}
+            <Form inline onSubmit={handleSearchSubmit} className="ms-3">
+              <Row>
+                <Col xs="auto">
+                  <Form.Control
+                    type="text"
+                    placeholder="Search pets"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </Col>
+                <Col xs="auto">
+                  <Button variant="outline-light" type="submit">
+                    Search
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+
+            {/* Enhanced Auth Section */}
+            {isAuthenticated ? (
+              <div
+                className="nav-link"
+                role="button"
+                tabIndex="0"
+                onClick={handleLogout}
+                onKeyDown={(e) =>
+                  (e.key === "Enter" || e.key === " ") && handleLogout()
+                }
+              >
                 <FontAwesomeIcon icon={faSignOutAlt} /> Logout
-              </Nav.Link>
+              </div>
             ) : (
-              <Nav.Link className="nav-link" onClick={handleLoginModalOpen}>
+              <div
+                className="nav-link"
+                role="button"
+                tabIndex="0"
+                onClick={() => {
+                  handleLoginModalOpen();
+                  handleNavCollapse();
+                }}
+                onKeyDown={(e) =>
+                  (e.key === "Enter" || e.key === " ") && handleLoginModalOpen()
+                }
+              >
                 <FontAwesomeIcon icon={faUser} /> Login
-              </Nav.Link>
+              </div>
             )}
           </Nav>
         </Navbar.Collapse>
       </Container>
 
-      {/* ✅ Login Modal */}
       <Modal show={showLoginModal} onHide={handleLoginModalClose} centered>
         <Modal.Header closeButton></Modal.Header>
         <Modal.Body>
-          <Login />
+          <Login onLoginSuccess={handleLoginModalClose} />
         </Modal.Body>
       </Modal>
     </Navbar>
