@@ -7,7 +7,6 @@ const Contact = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isSubmitting },
     reset,
   } = useForm();

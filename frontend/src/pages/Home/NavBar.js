@@ -11,7 +11,7 @@ import {
   Button,
 } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faSignOutAlt, faPaw } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import logo from "../../Assets/Images/pet-logo.png";

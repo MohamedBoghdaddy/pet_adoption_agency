@@ -1,5 +1,4 @@
-import React from "react";
-import { Container, Card, Button } from "react-bootstrap";
+import {  Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "../../styles/StorytellingSection.css";
